@@ -2,7 +2,7 @@
 cms_exclude: true
 header:
   caption: ""
-  image: ""
+  # image: 
 title: Publications
-view: 4
+view: 2
 ---

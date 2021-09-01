@@ -3,6 +3,8 @@ abstract: This paper follows the implementation of a proof-of-concept localizati
 authors:
 - admin
 - Sabin Gheorghiu
+- Rene Molnar
+- Dr Ryan Grammenos
 date: 
 doi: ""
 featured: true
