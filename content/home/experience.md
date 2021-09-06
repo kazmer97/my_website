@@ -50,6 +50,20 @@ experience:
         * Wrote a 5 and 10 year outlook report on the effects of Automation and AI on operating models across industries, providing a roadmap for sectors where management consulting might be needed.
         * Presented the analyses techniques and data sources in the excel models, during 3 client meetings accompanying the partner and manager
 
+  - title: Industry 4.0 Research Intern
+    company: Elektra S.A.
+    company_url:
+    company_logo: 
+    location: San Sebastian, Spain
+    date_start: '2017-08-15'
+    date_end: '2017-09-17'
+    description: |2-
+        Responsabilities included:
+        
+        * Researched topics that fall under the umbrella term Industry 4.0, such as: predictive maintenance, AR assisted production lines, machine learning, collaborative robots.
+        * Wrote, recoded and edited one in-depth explanatory and one marketing video about the technologies enabling the next industrial revolution, both of are still in use at the company.
+        * Shadowed the head of the innovation lab at the company, to learn about their digitalisation efforts.
+
 design:
   columns: '2'
 ---
