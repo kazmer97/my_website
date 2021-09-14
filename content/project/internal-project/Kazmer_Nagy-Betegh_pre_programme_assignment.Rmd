@@ -1,4 +1,6 @@
 ---
+tags:
+  - Data
 title: 'MAM 2022 Pre-programme Assignment'
 author: "Kazmer Nagy-Betegh"
 date: "DATE HERE"

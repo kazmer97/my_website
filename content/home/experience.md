@@ -36,6 +36,17 @@ experience:
         * Code improvements and debugging
         * Development Process Improvement
         
+  - title: Digitalisation Consultant
+    company: PROMELEK S.A.
+    location: Cluj-Napoca, Romania
+    date_start: '2020-09-01'
+    date_end: '2020-12-01'
+    description: |2-
+        Responsabilities included:
+        
+        * Developed a Micrososft Power Automate based tool for the company to track Product Returns
+        * Helped in definining the new fully digital process and the information flow between teams.
+        
   - title: Business Analyst Intern
     company: Humatica
     company_url: ''

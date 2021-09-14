@@ -18,7 +18,7 @@ publication: In *Tampere International Conference on Localization and GNSS 2021*
 publication_short: In *ICL-GNSS*
 publication_types:
 - "1"
-publishDate: "2017-01-01T00:00:00Z"
+publishDate: "2021-06-15"
 slides: example
 summary: Ultra Wideband based low power localisation system develop for wireless anchor operaiton.
 tags:
