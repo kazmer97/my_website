@@ -1,0 +1,259 @@
+---
+tags:
+  - DataVis
+  
+external_link: ""
+
+image:
+  caption: 
+  focal_point: Smart
+  
+title: "2020 US Election Results vs Vaccination"
+author: "Kazmer Nagy-Betegh"
+
+  
+date: "2021-09-14"
+output:
+  html_document:
+    theme: flatly
+    highlight: zenburn
+    number_sections: yes
+    toc: yes
+    toc_float: yes
+    code_folding: show
+
+
+---
+
+<script src="{{< blogdown/postref >}}index_files/header-attrs/header-attrs.js"></script>
+
+
+<div id="introduction" class="section level1">
+<h1>Introduction</h1>
+<p>The purpose of this exercise is to reproduce a plot using your <code>dplyr</code> and <code>ggplot2</code> skills. Read the article <a href="https://acasignups.net/21/07/18/racial-factor-theres-77-counties-which-are-deep-blue-also-low-vaxx-guess-what-they-have">The Racial Factor: There’s 77 Counties Which Are Deep Blue But Also Low-Vaxx. Guess What They Have In Common?</a> and have a look at the attached figure.</p>
+<p><img src = "/vaxxes_by_state_red_blue_every_county_070321_1.jpg" /></p>
+<p>Datasets that are going to be used for the exercise.</p>
+<ol style="list-style-type: decimal">
+<li>To get vaccination by county, we will use <a href="https://data.cdc.gov/Vaccinations/COVID-19-Vaccinations-in-the-United-States-County/8xkx-amqh">data from the CDC</a></li>
+<li>You need to get <a href="https://dataverse.harvard.edu/dataset.xhtml?persistentId=doi:10.7910/DVN/VOQCHQ">County Presidential Election Returns 2000-2020</a></li>
+<li>Finally, you also need an estimate of the <a href="https://www.ers.usda.gov/webdocs/DataFiles/48747/PopulationEstimates.csv?v=2232">population of each county</a></li>
+</ol>
+<pre class="r"><code># Download CDC vaccination by county
+cdc_url &lt;- &quot;https://data.cdc.gov/api/views/8xkx-amqh/rows.csv?accessType=DOWNLOAD&quot;
+vaccinations &lt;- vroom(cdc_url) %&gt;% 
+  janitor::clean_names() %&gt;% 
+  filter(fips != &quot;UNK&quot;) # remove counties that have an unknown (UNK) FIPS code
+
+# Download County Presidential Election Returns
+# https://dataverse.harvard.edu/dataset.xhtml?persistentId=doi:10.7910/DVN/VOQCHQ -- Download the file from the given URL into your base repository
+election2020_results &lt;- vroom(here::here(&quot;csv&quot;, &quot;countypres_2000-2020.csv&quot;)) %&gt;% #read the file from the location you saved it to
+  janitor::clean_names() %&gt;% 
+  
+  # just keep the results for the 2020 election
+  filter(year == &quot;2020&quot;) %&gt;% 
+  
+  # change original name county_fips to fips, to be consistent with the other two files
+  rename (fips = county_fips)
+
+# Download county population data
+population_url &lt;- &quot;https://www.ers.usda.gov/webdocs/DataFiles/48747/PopulationEstimates.csv?v=2232&quot;
+population &lt;- vroom(population_url) %&gt;% 
+  janitor::clean_names() %&gt;% 
+  
+  # select the latest data, namely 2019
+  select(fips = fip_stxt, pop_estimate_2019) %&gt;% 
+  
+  # pad FIPS codes with leading zeros, so they are always made up of 5 characters
+  mutate(fips = stringi::stri_pad_left(fips, width=5, pad = &quot;0&quot;))</code></pre>
+<div id="explore-the-data" class="section level3">
+<h3>Explore the Data</h3>
+<p>A quick look at the columns within each dataframe tells us which variables we need to filter for later on to build the graph.</p>
+<pre class="r"><code>head(election2020_results)</code></pre>
+<pre><code>## # A tibble: 6 × 12
+##    year state   state_po county_name fips  office    candidate party candidatevotes
+##   &lt;dbl&gt; &lt;chr&gt;   &lt;chr&gt;    &lt;chr&gt;       &lt;chr&gt; &lt;chr&gt;     &lt;chr&gt;     &lt;chr&gt;          &lt;dbl&gt;
+## 1  2020 ALABAMA AL       AUTAUGA     01001 PRESIDENT JOSEPH R… DEMO…           7503
+## 2  2020 ALABAMA AL       AUTAUGA     01001 PRESIDENT OTHER     OTHER            429
+## 3  2020 ALABAMA AL       AUTAUGA     01001 PRESIDENT DONALD J… REPU…          19838
+## 4  2020 ALABAMA AL       BALDWIN     01003 PRESIDENT JOSEPH R… DEMO…          24578
+## 5  2020 ALABAMA AL       BALDWIN     01003 PRESIDENT OTHER     OTHER           1557
+## 6  2020 ALABAMA AL       BALDWIN     01003 PRESIDENT DONALD J… REPU…          83544
+## # … with 3 more variables: totalvotes &lt;dbl&gt;, version &lt;dbl&gt;, mode &lt;chr&gt;</code></pre>
+<pre class="r"><code>head(population)</code></pre>
+<pre><code>## # A tibble: 6 × 2
+##   fips  pop_estimate_2019
+##   &lt;chr&gt;             &lt;dbl&gt;
+## 1 00000         328239523
+## 2 01000           4903185
+## 3 01001             55869
+## 4 01003            223234
+## 5 01005             24686
+## 6 01007             22394</code></pre>
+<pre class="r"><code>head(vaccinations)</code></pre>
+<pre><code>## # A tibble: 6 × 27
+##   date       fips  mmwr_week recip_county       recip_state series_complete_pop…
+##   &lt;chr&gt;      &lt;chr&gt;     &lt;dbl&gt; &lt;chr&gt;              &lt;chr&gt;                      &lt;dbl&gt;
+## 1 09/13/2021 55129        37 Washburn County    WI                          55.5
+## 2 09/13/2021 46015        37 Brule County       SD                          36  
+## 3 09/13/2021 48329        37 Midland County     TX                           0  
+## 4 09/13/2021 20147        37 Phillips County    KS                          37.9
+## 5 09/13/2021 51043        37 Clarke County      VA                          46.1
+## 6 09/13/2021 26119        37 Montmorency County MI                          45.8
+## # … with 21 more variables: series_complete_yes &lt;dbl&gt;,
+## #   series_complete_12plus &lt;dbl&gt;, series_complete_12plus_pop_pct &lt;dbl&gt;,
+## #   series_complete_18plus &lt;dbl&gt;, series_complete_18plus_pop_pct &lt;dbl&gt;,
+## #   series_complete_65plus &lt;dbl&gt;, series_complete_65plus_pop_pct &lt;dbl&gt;,
+## #   completeness_pct &lt;dbl&gt;, administered_dose1_recip &lt;dbl&gt;,
+## #   administered_dose1_pop_pct &lt;dbl&gt;, administered_dose1_recip_12plus &lt;dbl&gt;,
+## #   administered_dose1_recip_12plus_pop_pct &lt;dbl&gt;, …</code></pre>
+</div>
+<div id="data-filtering" class="section level3">
+<h3>Data Filtering</h3>
+<p>Every datapoint that was below 90% completeness was dropped to be in line with the authors process. The graph would be even closer if the seperate datasets used by the author would be downloaded as well. <a href="https://acasignups.net/21/08/31/weekly-update-us-covid19-vaccination-levels-county-partisan-lean1">Authors Description of Data Utilisation</a></p>
+<pre class="r"><code>vax_complete_pop_pct &lt;- vaccinations%&gt;%
+  filter(completeness_pct&gt;90.0)%&gt;%
+  group_by(fips)%&gt;%
+  summarise(series_complete_pop_pct = max(series_complete_pop_pct))
+  
+
+
+population &lt;- population%&gt;%
+  mutate(pop = pop_estimate_2019) #add new shorted column name for simpler access
+
+vax_complete_pop_pct &lt;- left_join(x = vax_complete_pop_pct, 
+                                  y = population, by = &quot;fips&quot;)%&gt;%
+  na.omit() #left join the population data table with the vaccination data based on the county codes.
+
+
+trump_votes &lt;- election2020_results%&gt;%
+  filter(candidate == &quot;DONALD J TRUMP&quot;)%&gt;% #filter for Donald Trump
+  filter(mode == &quot;TOTAL&quot;)%&gt;% #only interested in Total votes
+  group_by(fips)%&gt;%
+  mutate(prcOfVote = (candidatevotes/totalvotes)*100)
+
+head(trump_votes)</code></pre>
+<pre><code>## # A tibble: 6 × 13
+## # Groups:   fips [6]
+##    year state   state_po county_name fips  office    candidate party candidatevotes
+##   &lt;dbl&gt; &lt;chr&gt;   &lt;chr&gt;    &lt;chr&gt;       &lt;chr&gt; &lt;chr&gt;     &lt;chr&gt;     &lt;chr&gt;          &lt;dbl&gt;
+## 1  2020 ALABAMA AL       AUTAUGA     01001 PRESIDENT DONALD J… REPU…          19838
+## 2  2020 ALABAMA AL       BALDWIN     01003 PRESIDENT DONALD J… REPU…          83544
+## 3  2020 ALABAMA AL       BARBOUR     01005 PRESIDENT DONALD J… REPU…           5622
+## 4  2020 ALABAMA AL       BIBB        01007 PRESIDENT DONALD J… REPU…           7525
+## 5  2020 ALABAMA AL       BLOUNT      01009 PRESIDENT DONALD J… REPU…          24711
+## 6  2020 ALABAMA AL       BULLOCK     01011 PRESIDENT DONALD J… REPU…           1146
+## # … with 4 more variables: totalvotes &lt;dbl&gt;, version &lt;dbl&gt;, mode &lt;chr&gt;,
+## #   prcOfVote &lt;dbl&gt;</code></pre>
+<pre class="r"><code>vax_complete_pop_pct &lt;- left_join(x = vax_complete_pop_pct, y = trump_votes, by=&quot;fips&quot;)%&gt;%
+                        na.omit()</code></pre>
+<pre class="r"><code>library(Hmisc)
+
+ggplot(vax_complete_pop_pct, aes(x = prcOfVote, y = series_complete_pop_pct))+
+  geom_point(alpha = 0.2, #set the transparency level
+             color = &quot;snow4&quot;, # https://www.nceas.ucsb.edu/sites/default/files/2020-04/colorPaletteCheatsheet.pdf easily find color names
+             aes(size = pop/10^6))+ # set the size of the points to scale with the county population size, get population numbers in the millions
+  scale_size(range = c(.1, 15), #set the size range for the county circles
+             name = &quot;Population (M)&quot;,)+ #set the caption
+  geom_point(size= 0.1)+ # add the points to the graph again with given size to mark the middle of the county circles
+  annotate(&quot;rect&quot;, #use anotate to only apply changes to one layer of the graph and not all the data in the graph
+           xmin = 45, #define the limits of a rectangle
+           xmax = Inf,
+           ymin = -Inf, 
+           ymax = Inf, 
+           fill = &quot;indianred1&quot;, #specify the color
+           alpha = 0.3)+ 
+  annotate(&quot;rect&quot;, 
+           xmin = 0, 
+           xmax = 55, 
+           ymin = -Inf, 
+           ymax = Inf, 
+           fill = &quot;royalblue1&quot;, 
+           alpha = 0.3)+
+  annotate(&quot;line&quot;, #add a line for herd immunity
+           x = seq(0,100), 
+           y = 85, 
+           lty = 2, 
+           color = &quot;blue&quot;)+
+  annotate(&quot;text&quot;, #add herd immunity text
+           x = 17, 
+           y = 87, 
+           label = &quot;Herd Immunity threshold (?)&quot;, 
+           size = 2, 
+           fontface = 4, 
+           color = &quot;blue&quot;)+
+  annotate(&quot;text&quot;, #see the calculation for the fomula in the last code snippet
+           x = 15, 
+           y = 15, 
+           label = &quot;y = -0.4956x + 0.73669\nR\u00B2 = 0.501&quot;, 
+           size = 2, 
+           color= &quot;red&quot;, 
+           hjust = &quot;centre&quot;, 
+           fontface = &quot;bold&quot;)+
+  annotate(&quot;line&quot;, 
+           x = seq(0,100), 
+           y = 51.65, 
+           lty = 2,
+           color = &quot;blue&quot;)+
+  annotate(&quot;text&quot;, 
+           x = 10, 
+           y = 54,
+           label =  sprintf(&quot;ACTUAL: %0.2f %%&quot;,51.65), 
+           size =2, 
+           fontface = &quot;bold&quot;, 
+           color = &quot;blue&quot;)+
+  annotate(&quot;line&quot;, 
+           x = seq(0,100), 
+           y = 70, 
+           lty = 2,
+           color = &quot;blue&quot;)+
+  annotate(&quot;text&quot;, x = 10, y = 72, label =  sprintf(&quot;TARGET: %0.2f %%&quot;,70), size =2, fontface = &quot;bold&quot;, color = &quot;blue&quot;)+
+  annotate(&quot;text&quot;, x = 40, y = 15, label = &quot;5/09/2021&quot;, color = &quot;red&quot;, fontface = &quot;bold&quot;, size = 2)+
+  geom_smooth(method = &quot;lm&quot;, 
+              se = FALSE, 
+              lty=5, 
+              color = &quot;blue&quot;, 
+              lwd = 0.5)+
+  ylab(&quot;% of Total Population Vaccinated&quot;)+
+  xlab(&quot;2020 Trump vote %&quot;)+
+  labs(title = &quot;COVID-19 VACCINATION LEVELS \nOUT OF TOTAL POPULATION BY COUNTY&quot;)+
+  theme_light()+
+  scale_y_continuous(expand = c(0,0), 
+                     labels = function(y) paste0(y, &quot;%&quot;), 
+                     breaks = scales::pretty_breaks(n=20), 
+                     limits = c(0,100))+
+  scale_x_continuous(expand = c(0,0), 
+                     labels = function(x) paste0(x, &quot;%&quot;), 
+                     breaks = scales::pretty_breaks(n=20), 
+                     limits = c(0,100))+
+  theme(aspect.ratio = 20/18,
+        axis.text.x = element_text(size = 5),
+        axis.text.y = element_text(size = 5),
+        axis.title = element_text(size = 10),
+        plot.title = element_text(size = 10, 
+                                  face = &quot;bold&quot;, 
+                                  hjust = 0.5),
+        legend.title = element_text())</code></pre>
+<p><img src="{{< blogdown/postref >}}index_files/figure-html/unnamed-chunk-4-1.png" width="648" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>print(summary(lm(vax_complete_pop_pct,formula = series_complete_pop_pct ~ prcOfVote)))</code></pre>
+<pre><code>## 
+## Call:
+## lm(formula = series_complete_pop_pct ~ prcOfVote, data = vax_complete_pop_pct)
+## 
+## Residuals:
+##    Min     1Q Median     3Q    Max 
+## -31.07  -4.55   0.09   4.65  34.15 
+## 
+## Coefficients:
+##             Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept)  74.7010     0.7769    96.2   &lt;2e-16 ***
+## prcOfVote    -0.4979     0.0118   -42.2   &lt;2e-16 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Residual standard error: 7.7 on 1721 degrees of freedom
+## Multiple R-squared:  0.509,  Adjusted R-squared:  0.508 
+## F-statistic: 1.78e+03 on 1 and 1721 DF,  p-value: &lt;2e-16</code></pre>
+<pre class="r"><code>sprintf(&quot;Percentage of the total population vaccinated: %0.2f &quot;,sum(vax_complete_pop_pct$series_complete_pop_pct*vax_complete_pop_pct$pop)/sum(vax_complete_pop_pct$pop))</code></pre>
+<pre><code>## [1] &quot;Percentage of the total population vaccinated: 52.62 &quot;</code></pre>
+</div>
+</div>

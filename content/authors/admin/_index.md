@@ -42,6 +42,8 @@ superuser: true
 title: Kázmér Nagy-Betegh
 ---
 
+## Biography
+
 I am from Cluj-Napoca Romania, born in a Hungarian family, I finished high school there.
   
 ### Studies:
@@ -65,6 +67,10 @@ I have played **water polo** at national level for 10 years in Romania and 4 yea
  - The Last Samurai by Helen Dewitt 
  - The Sun Also Rises by Ernest Hemingway
  - Flowers for Algernon by Daniel Keyes
+ 
+# Purpose of The Website
+
+I use this site to give you a quick overview of myself and some highlights from my project and work experiences.
 
 
 {{< icon name="download" pack="fas" >}} Download my {{< staticref "uploads/kazmer_cv2021.pdf" "newtab" >}}resumé{{< /staticref >}}.

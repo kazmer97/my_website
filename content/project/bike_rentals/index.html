@@ -1,0 +1,134 @@
+---
+tags:
+  - DataVis
+title: "Bike Rental Data London"
+author: "Study Group 11: Nisa Ozer, Lauren Wade, Nereid Kwok, Thomas Giannetti, Kazmer Nagy-Betegh"
+date: "2021-09-14"
+output:
+  html_document:
+    theme: flatly
+    highlight: zenburn
+    number_sections: yes
+    toc: yes
+    toc_float: yes
+    code_folding: show
+---
+
+<script src="{{< blogdown/postref >}}index_files/header-attrs/header-attrs.js"></script>
+
+
+<div id="page-still-under-construction-futher-insights-and-examplanations-will-be-added" class="section level3">
+<h3>Page Still under construction, Futher insights and examplanations will be added</h3>
+</div>
+<div id="excess-rentals-in-tfl-bike-sharing" class="section level1">
+<h1>Excess rentals in TfL bike sharing</h1>
+<p>We can get the latest data by running the following</p>
+<pre class="r"><code>url &lt;- &quot;https://data.london.gov.uk/download/number-bicycle-hires/ac29363e-e0cb-47cc-a97a-e216d900a6b0/tfl-daily-cycle-hires.xlsx&quot;
+
+# Download TFL data to temporary file
+httr::GET(url, write_disk(bike.temp &lt;- tempfile(fileext = &quot;.xlsx&quot;)))</code></pre>
+<pre><code>## Response [https://airdrive-secure.s3-eu-west-1.amazonaws.com/london/dataset/number-bicycle-hires/2021-08-23T14%3A32%3A29/tfl-daily-cycle-hires.xlsx?X-Amz-Algorithm=AWS4-HMAC-SHA256&amp;X-Amz-Credential=AKIAJJDIMAIVZJDICKHA%2F20210914%2Feu-west-1%2Fs3%2Faws4_request&amp;X-Amz-Date=20210914T210336Z&amp;X-Amz-Expires=300&amp;X-Amz-Signature=2c9edd28f85ce6f949f4804a0385727edd31b53e2b898612ac79dd07d65d0e3b&amp;X-Amz-SignedHeaders=host]
+##   Date: 2021-09-14 21:07
+##   Status: 200
+##   Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet
+##   Size: 173 kB
+## &lt;ON DISK&gt;  /var/folders/h6/kmqd84j93_z506mgbtp4kqpm0000gn/T//RtmpZedoSQ/filee4fc232afd14.xlsx</code></pre>
+<pre class="r"><code># Use read_excel to read it as dataframe
+bike0 &lt;- read_excel(bike.temp,
+                   sheet = &quot;Data&quot;,
+                   range = cell_cols(&quot;A:B&quot;))
+
+# change dates to get year, month, and week
+bike &lt;- bike0 %&gt;% 
+  clean_names() %&gt;% 
+  rename (bikes_hired = number_of_bicycle_hires) %&gt;% 
+  mutate (year = year(day),
+          month = lubridate::month(day, label = TRUE),
+          week = isoweek(day))</code></pre>
+<pre class="r"><code>expected_monthly &lt;- bike%&gt;%
+  filter(day &gt;= dmy(&quot;01/01/2016&quot;), day&lt;dmy(&quot;01/01/2020&quot;))%&gt;%
+  group_by(month)%&gt;%
+  summarise(expected_avg = mean(bikes_hired))
+
+monthly_rentals &lt;- bike%&gt;%
+  filter(day &gt;= dmy(&quot;01/01/2016&quot;))%&gt;%
+  group_by(year,month) %&gt;% 
+  summarise(actual_avg=mean(bikes_hired)) %&gt;% 
+  left_join(expected_monthly, by = &quot;month&quot;)
+
+monthly_rentals %&gt;% 
+  ggplot(aes(x=as.numeric(month)))+
+  geom_line(aes(y=expected_avg),color=&quot;blue&quot;)+
+  geom_line(aes(y=actual_avg),color = &quot;black&quot;)+
+  geom_ribbon(aes(ymin=expected_avg, ymax=pmax(actual_avg,expected_avg)),fill=&quot;springgreen1&quot;, alpha = 0.3) +
+  geom_ribbon(aes(ymin=pmin(actual_avg,expected_avg), ymax=expected_avg), fill=&quot;tomato&quot;, alpha = 0.3)+
+  facet_wrap(~year)+
+  theme_bw()+
+  theme(legend.position = &quot;none&quot;,
+        strip.background = element_blank(),
+        panel.border = element_blank(),
+        plot.title = element_text(size = 9),
+        plot.subtitle = element_text(size = 7),
+        strip.text.x = element_text(size = 5),
+        axis.text.y = element_text(size = 5),
+        axis.text.x = element_text(size = 5))+
+  scale_x_continuous(labels = function(x) month.abb[x])+
+  labs(title = &quot;Monthly change in Tfl bike rentals&quot;,
+       subtitle = &quot;Change from montly average shown in Blue and calculated between 2016-2019&quot;,
+       x = &quot;Month&quot;,
+       y = &quot;Bikes rentals&quot;)</code></pre>
+<p><img src="{{< blogdown/postref >}}index_files/figure-html/unnamed-chunk-1-1.png" width="648" style="display: block; margin: auto;" /></p>
+<p>The second one looks at percentage changes from the expected level of weekly rentals. The two gray shaded rectangles correspond to Q2 (weeks 14-26) and Q4 (weeks 40-52).</p>
+<pre class="r"><code>expected_weekly &lt;- bike %&gt;% 
+  filter(day&gt;=dmy(&quot;4/1/2016&quot;) &amp; day&lt;=dmy(&quot;29/12/2019&quot;)) %&gt;% 
+  group_by(week) %&gt;% 
+  summarise(expected_rentals=mean(bikes_hired))
+
+weekly_rentals &lt;- bike %&gt;% 
+  filter(day&gt;dmy(&quot;4/1/2016&quot;)) %&gt;% 
+  group_by(year,week) %&gt;%
+  mutate(yearminusone = year - 1,
+         year_week = ifelse(week==53 &amp; month==&quot;Jan&quot;,
+                            paste(yearminusone,week,sep=&quot;-&quot;),
+                            paste(year,week,sep=&quot;-&quot;))) %&gt;%
+  group_by(year_week) %&gt;%
+  mutate(actual_rentals = mean(bikes_hired)) %&gt;% 
+  filter(day==max(day)) %&gt;%
+  ungroup() %&gt;%
+  left_join(expected_weekly,by =c(&quot;week&quot;)) %&gt;% 
+  mutate(delta=(actual_rentals/expected_rentals- 1),
+         delta = replace_na(delta, 1),
+         month=ifelse(week==53,&quot;Dec&quot;,month),
+         year=ifelse(week==53,year-1,year)) %&gt;% 
+  add_row(year=2016,week=53,delta=0)
+
+           
+
+weekly_rentals %&gt;% 
+  ggplot(aes(x=week,
+             y=delta))+
+  geom_line(aes(y = delta)) +
+  annotate(&quot;rect&quot;, xmin = 13, xmax = 26, ymin = -Inf, ymax = Inf, fill = &quot;grey&quot;, alpha = 0.3)+
+  annotate(&quot;rect&quot;, xmin = 39, xmax = 53, ymin = -Inf, ymax = Inf, fill = &quot;grey&quot;, alpha = 0.3)+
+  geom_ribbon(aes(ymin=0, ymax=pmax(0, delta), fill=&quot;#eab5b7&quot;, alpha = 0.3)) +
+  geom_ribbon(aes(ymin=pmin(0, delta), ymax=0, fill=&quot;#c0e0c3&quot;, alpha = 0.3))+
+  geom_rug(data=subset(weekly_rentals,delta&gt;=0),color=&quot;#c0e0c3&quot;,sides=&quot;b&quot;)+
+  geom_rug(data=subset(weekly_rentals,delta&lt;0),color=&quot;#eab5b7&quot;,sides=&quot;b&quot;)+
+  facet_wrap(~year)+
+  scale_y_continuous(labels = scales::percent)+
+  labs(title=&quot;Weekly changes in TfL bike rentals&quot;,
+       subtitle=&quot;% change from weekly averages \ncalculated between 2016-2019&quot;,
+       x=&quot;week&quot;,
+       y=&quot;&quot;)+
+  scale_x_continuous(breaks = c(13,26,39,53))+
+  theme_bw()+
+  theme(legend.position = &quot;none&quot;,
+        strip.background = element_blank(),
+        panel.border = element_blank(),
+        plot.title = element_text(size = 9),
+        plot.subtitle = element_text(size = 7),
+        strip.text.x = element_text(size = 5),
+        axis.text.y = element_text(size = 5),
+        axis.text.x = element_text(size = 5))</code></pre>
+<p><img src="{{< blogdown/postref >}}index_files/figure-html/unnamed-chunk-2-1.png" width="648" style="display: block; margin: auto;" /></p>
+</div>
