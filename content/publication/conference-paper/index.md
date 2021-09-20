@@ -10,8 +10,8 @@ doi: ""
 featured: true
 
 links:
-- name: Custom Link
-  url: 
+- name: IEEE Publication
+  url: https://ieeexplore.ieee.org/abstract/document/9452247/references#references
 projects:
 - internal-project
 publication: In *Tampere International Conference on Localization and GNSS 2021*
@@ -19,7 +19,9 @@ publication_short: In *ICL-GNSS*
 publication_types:
 - "1"
 publishDate: "2021-06-15"
-slides: example
+
+slides: wally
+
 summary: Ultra Wideband based low power localisation system develop for wireless anchor operaiton.
 tags:
 - Source Themes
