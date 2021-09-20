@@ -17,14 +17,14 @@ output:
   html_document:
     theme: flatly
     highlight: zenburn
-    number_sections: yes
-    toc: yes
-    toc_float: yes
+    # css: 
+    number_sections: TRUE
+    toc: TRUE
+    toc_float: TRUE
     code_folding: show
-
-
+    df_print: paged
+    
 ---
-
 
 
 ```{r, setup, echo=FALSE}
@@ -60,10 +60,9 @@ library(rvest) # to scrape wikipedia page
 
 # Introduction
 
-The purpose of this exercise is to reproduce a plot using your `dplyr` and `ggplot2` skills. Read the  article [The Racial Factor: There's 77 Counties Which Are Deep Blue But Also Low-Vaxx. Guess What They Have In Common?](https://acasignups.net/21/07/18/racial-factor-theres-77-counties-which-are-deep-blue-also-low-vaxx-guess-what-they-have) and have a look at the attached figure.
+The purpose of this exercise is to reproduce a plot using your `dplyr` and `ggplot2` skills. Read the  article [The Racial Factor: There's 77 Counties Which Are Deep Blue But Also Low-Vaxx. Guess What They Have In Common?](https://acasignups.net/21/07/18/racial-factor-theres-77-counties-which-are-deep-blue-also-low-vaxx-guess-what-they-have) and have a look at the above figure.
 
 
-<img src = "/vaxxes_by_state_red_blue_every_county_070321_1.jpg" />
 
 Datasets that are going to be used for the exercise.
 
@@ -71,7 +70,6 @@ Datasets that are going to be used for the exercise.
 1. You need to get [County Presidential Election Returns 2000-2020](https://dataverse.harvard.edu/dataset.xhtml?persistentId=doi:10.7910/DVN/VOQCHQ)
 1. Finally, you also need an estimate of the [population of each county](https://www.ers.usda.gov/webdocs/DataFiles/48747/PopulationEstimates.csv?v=2232)
  
-
 
 ```{r, echo=TRUE, cache=TRUE}
 
@@ -105,18 +103,19 @@ population <- vroom(population_url) %>%
 
 ```
 
-### Explore the Data
+## Explore the Data
+
 
 A quick look at the columns within each dataframe tells us which variables we need to filter for later on to build the graph.
 
-```{r}
+```{r, cols.print = 10, rows.print = 10}
 head(election2020_results)
 head(population)
 head(vaccinations)
 ```
 
 
-### Data Filtering 
+## Data Filtering 
 
 Every datapoint that was below 90% completeness was dropped to be in line with the authors process. The graph would be even closer if the seperate datasets used by the author would be downloaded as well. [Authors Description of Data Utilisation](https://acasignups.net/21/08/31/weekly-update-us-covid19-vaccination-levels-county-partisan-lean1)
 

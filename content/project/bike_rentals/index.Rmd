@@ -1,6 +1,7 @@
 ---
 tags:
   - DataVis
+  
 title: "Bike Rental Data London"
 author: "Study Group 11: Nisa Ozer, Lauren Wade, Nereid Kwok, Thomas Giannetti, Kazmer Nagy-Betegh"
 date: "`r Sys.Date()`"
@@ -12,6 +13,8 @@ output:
     toc: yes
     toc_float: yes
     code_folding: show
+    # df_print: paged
+    
 ---
 
 ### Page Still under construction, Futher insights and examplanations will be added

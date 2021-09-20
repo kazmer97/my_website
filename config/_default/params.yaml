@@ -20,7 +20,7 @@ twitter: ''
 
 # Contact (edit or remove options as required)
 
-email: knagybetegh.mam2022@london.edu
+email: 
 phone:
 address:
   street:
@@ -67,8 +67,11 @@ highlight_languages:
   - r
   - python
   - latex
+highlight_style:
+
+
 math: false
-diagram: false
+diagram: true
 privacy_pack: false
 edit_page:
   repo_url: ''
