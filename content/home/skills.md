@@ -20,7 +20,7 @@ feature:
   icon: r-project
   icon_pack: fab
   name: R
-- description: 70%
+- description: 80 %
   icon: chart-line
   icon_pack: fas
   name: Statistics
@@ -42,5 +42,13 @@ feature:
   icon_pack: custom
   description: 80%
   name: C++
+- description: 70%
+  icon: matlab
+  icon_pack: custom
+  name: Matlab
+- description: 75%
+  icon: mysql
+  icon_pack: custom
+  name: MySQL
  
 ---

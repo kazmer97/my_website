@@ -30,7 +30,7 @@ content:
   - name: Internet of things
     tag: Localisation
   - name: Machine Learning
-    tag: Data
+    tag: ML
   - name: Visualisation
     tag: DataVis
 

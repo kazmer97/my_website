@@ -3,7 +3,7 @@ tags:
   - DataVis
   
 title: "Bike Rental Data London"
-author: "Study Group 11: Nisa Ozer, Lauren Wade, Nereid Kwok, Thomas Giannetti, Kazmer Nagy-Betegh"
+author: "Kazmer Nagy-Betegh"
 date: "`r Sys.Date()`"
 output:
   html_document:
