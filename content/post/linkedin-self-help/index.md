@@ -1,7 +1,7 @@
 ---
 # Documentation: https://wowchemy.com/docs/managing-content/
 
-title: "Why Linkedin and Self Help should go away"
+title: "Self Help and Linkedin Culture"
 subtitle: "The case for reading higher quality things"
 summary: ""
 authors: 
@@ -30,6 +30,12 @@ image:
 projects: []
 ---
 
+# Disclaimer
+
+This is an **opinion piece** which is meant to convey one of my ideas. It should be taken as such, it is not meant to offend, any mocking is satirical in nature.
+
+# Essay
+
 Self help, books are like linkedin.  A lot of pretentious humble bragging repeated unoriginal content and here and there an actual useful bit of information that you could have probably gotten from somewhere else as well. So why is it that it is so prevalent in modern culture? 
 
 Now I am not arguing against the - existence of self help and LinkedIn, but I do believe the wast majority of self help literature
@@ -42,4 +48,5 @@ What is fiction with literary value? It is a piece of work that captures a slice
 I believe the best example of good writing is focusing on what you can take out from the text. The "A farewell to Arms: The Hemingway library edition" contains the manuscript of the book and how to author progressed in condensing and sharpening the expressiveness of the book by taking things out. I highly recommend checking this out, as it is a form of communication we should all strive towards instead of wasting words. 
 
 In the name of consciousness let me conclude here. What is the reason for this essays existence? Promote literature as a medium for deep thinking about the world and through that engage in self reflection and improvement. Also slightly mock self-help/linkedin culture. There is value in conciseness that is worth exploring and its not the length of a message that determines its value and neither is its author.
+
 
