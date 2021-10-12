@@ -311,7 +311,7 @@ We can also do out of sample testing using the method of k-fold cross validation
 control <- trainControl (
     method="cv",
     number=10,
-    verboseIter=TRUE) #by setting this to true the model will report its progress after each estimation
+    verboseIter=F) #by setting this to true the model will report its progress after each estimation
 
 #we are going to train the model and report the results using k-fold cross validation
 
@@ -328,7 +328,7 @@ summary(plsFit)
 control <- trainControl (
     method="cv",
     number=5,
-    verboseIter=TRUE) #by setting this to true the model will report its progress after each estimation
+    verboseIter=F) #by setting this to true the model will report its progress after each estimation
 
 #we are going to train the model and report the results using k-fold cross validation
 
@@ -345,7 +345,7 @@ summary(plsFit)
 control <- trainControl (
     method="cv",
     number=15,
-    verboseIter=TRUE) #by setting this to true the model will report its progress after each estimation
+    verboseIter=F) #by setting this to true the model will report its progress after each estimation
 
 #we are going to train the model and report the results using k-fold cross validation
 
@@ -656,7 +656,7 @@ The bond yields have explenatory power, however they do not improve the predicti
 control <- trainControl (
     method="cv",
     number=10,
-    verboseIter=T) #by setting this to true the model will report its progress after each estimation
+    verboseIter=F) #by setting this to true the model will report its progress after each estimation
 
 #we are going to train the model and report the results using k-fold cross validation
 
@@ -727,7 +727,7 @@ testing <- testing(train_test_split)
 control <- trainControl (
     method="cv",
     number=10,
-    verboseIter=T) #by setting this to true the model will report its progress after each estimation
+    verboseIter=F) #by setting this to true the model will report its progress after each estimation
 
 
 lambda_seq <- seq(0, 0.01, length = 1000)
@@ -819,7 +819,7 @@ testing <- testing(train_test_split)
 control <- trainControl (
     method="cv",
     number=10,
-    verboseIter=T) #by setting this to true the model will report its progress after each estimation
+    verboseIter=F) #by setting this to true the model will report its progress after each estimation
 
 
 inf_model1<-train(
@@ -848,7 +848,7 @@ testing <- testing(train_test_split)
 control <- trainControl (
     method="cv",
     number=10,
-    verboseIter=T) #by setting this to true the model will report its progress after each estimation
+    verboseIter=F) #by setting this to true the model will report its progress after each estimation
 
 
 lambda_seq <- seq(0, 0.01, length = 1000)
