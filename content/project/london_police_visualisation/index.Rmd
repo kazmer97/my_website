@@ -174,18 +174,18 @@ map_london <- leaflet()%>%
 
 ```{r echo=FALSE}
 
-library(htmlwidgets)
-library(htmltools)
-
-saveWidget(map_london, here::here("static/leaflet","leafMap.html"))
-
-library(widgetframe)
-
-frameWidget(map_london)
+# library(htmlwidgets)
+# library(htmltools)
+# 
+# saveWidget(map_london, here::here("static/leaflet","leafMap.html"))
+# 
+# library(widgetframe)
+# 
+# frameWidget(map_london)
 
 ```
 
-
+<iframe seamless src="/leaflet/leafMap.html" width="100%" height="500"></iframe>
 
 
 

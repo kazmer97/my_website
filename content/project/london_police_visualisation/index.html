@@ -9,9 +9,6 @@ tags:
 ---
 
 <script src="{{< blogdown/postref >}}index_files/header-attrs/header-attrs.js"></script>
-<script src="{{< blogdown/postref >}}index_files/htmlwidgets/htmlwidgets.js"></script>
-<script src="{{< blogdown/postref >}}index_files/pymjs/pym.v1.js"></script>
-<script src="{{< blogdown/postref >}}index_files/widgetframe-binding/widgetframe.js"></script>
 
 
 <p>Here are some results from my workings with the the London metropolitan police data for a LBS school assignment and the visualisations I have come up with.</p>
@@ -168,8 +165,8 @@ map_london &lt;- leaflet()%&gt;%
             pal =  colorNumeric(&quot;OrRd&quot;,stop_locations$intersection),
             title = &quot;Number of Stop and Searches&quot;)
 </code></pre>
-<div id="htmlwidget-1" style="width:100%;height:480px;" class="widgetframe html-widget"></div>
-<script type="application/json" data-for="htmlwidget-1">{"x":{"url":"index_files/figure-html//widgets/widget_unnamed-chunk-2.html","options":{"xdomain":"*","allowfullscreen":false,"lazyload":false}},"evals":[],"jsHooks":[]}</script>
+<iframe seamless src="/leaflet/leafMap.html" width="100%" height="500">
+</iframe>
 <pre class="r"><code>library(tidyr)
 
 london_ethnic_dist &lt;- data.frame(as.factor(c(&quot;White&quot;, &quot;Black&quot;, &quot;Asian&quot;, &quot;Other&quot;)),
