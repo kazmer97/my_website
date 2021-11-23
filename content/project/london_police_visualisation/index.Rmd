@@ -1,0 +1,277 @@
+---
+title: "Metropolitan Police Stop and Search Data"
+author: 
+  - admin
+date: "`r Sys.Date()`"
+
+tags:
+  - DataVis
+---
+
+
+Here are some results from my workings with the the London metropolitan police data for a LBS school assignment and the visualisations I have come up with. 
+
+You can find the data for this visualisation on [here](https://data.police.uk/data/)
+
+
+ 
+# MET Police
+
+
+```{r message=FALSE}
+library(readxl)
+library(dplyr)
+library(stringr)
+# load 2021 September data
+stop_search_2021 <- readr::read_csv(here::here("csv","stop-search","stop-search","2021-09","2021-09-metropolitan-stop-and-search.csv"))
+```
+
+
+```{r ward population, message=FALSE, collapse=TRUE}
+ward_population <- read_excel(path = here::here("csv","stop-search","/London-wards-2018_ESRI/CT0225_2011 Census - Age by ethnic group (based on CT0010) by sex - London HT wards.xlsx"),
+                              sheet = "CT0225 - All usual residents",
+                              skip = 11,
+                              col_names = T,
+                              range = "A11:VA674")%>%
+  janitor::clean_names()
+
+for(i in 4:573){
+  if(!is.na(ward_population[1,i])){
+    temp <- ward_population[1,i]
+  }
+  else{
+    ward_population[1,i] <- temp
+  }
+}
+
+names(ward_population)[4:length(ward_population)] <- paste0(ward_population[1,],"_",ward_population[2,])[4:length(ward_population)]
+
+ward_population <- ward_population%>%
+  janitor::clean_names()
+
+ward_population <- ward_population[-c(1,2),]
+
+ward_population <- ward_population%>%
+  # rename(area_code = x1,
+  #        area_name = x2,
+  #        total_population = x3)%>%
+  mutate(area_code = case_when(!is.na(x1) ~ str_split_fixed(ward_population$x1," ",2)[,1],
+                               TRUE ~ str_split_fixed(ward_population$x2," ",2)[,1]),
+         .after = x1,
+         area_name = case_when(!is.na(x1) ~ str_split_fixed(ward_population$x1," ",2)[,2],
+                               TRUE ~ str_split_fixed(ward_population$x2," ",2)[,2]),
+         population_total = x3)
+
+ward_population <-  subset(ward_population, select = -c(x1,x2,x3))
+
+
+indx_black <- grepl('black', colnames(ward_population))
+
+black_pop_total<-rowSums(data.frame(lapply(ward_population[which(indx_black)], as.numeric)))
+
+ward_population_no_age <- ward_population%>%
+  mutate(black_population = black_pop_total,
+         population_total = as.numeric(population_total))%>%
+  select(area_code,
+         area_name,
+         population_total,
+         black_population)%>%
+  mutate(prc_black = black_population/population_total)
+
+```
+
+
+```{r visualisation-1, collapse=TRUE, warning=FALSE}
+library(leaflet)
+library(sf)
+library(ggplot2)
+library(dplyr)
+library(leaflet.extras)
+
+
+# read in the shapefile, transform it into long lat format
+wards <- st_read(here::here("csv","stop-search","London-wards-2018_ESRI/London_Ward_CityMerged.shp"))
+wards <- st_transform(wards,crs=4326)
+
+# transform points to sf
+stops_sf <- st_as_sf(stop_search_2021%>%select(Longitude, Latitude)%>%na.omit,coords = c('Longitude',"Latitude"), crs = st_crs(wards))
+
+# intersection of polygons and points
+stop_locations <- stops_sf %>% 
+  mutate(intersection = as.integer(st_intersects(geometry, wards$geometry)),
+         area = if_else(is.na(intersection), '', wards$NAME[intersection])) 
+
+# split geometry in coordinates
+stop_locations <- stop_locations%>%
+  mutate(X= st_coordinates(geometry)[,1],
+         Y= st_coordinates(geometry)[,2])
+
+# join areas to stop search
+stop_search_2021 <- left_join(stop_search_2021, stop_locations, by = c("Longitude" = "X", "Latitude" = "Y" ))
+
+stop_search_2021_wards <- left_join(stop_search_2021, wards, by = c("area"= "NAME"))
+
+stop_search_2021_wards <- stop_search_2021_wards%>%
+  rename(point_geometry = geometry.x,
+         geometry = geometry.y)
+
+# stop_search_2021_wards <- stop_search_2021_wards%>%select(-c("geometry"))
+
+
+stop_search_2021_wards_pop <- left_join(stop_search_2021_wards,ward_population_no_age, by = c("area" = "area_name"))
+
+stop_search_2021_wards_pop <- stop_search_2021_wards_pop%>%
+  janitor::clean_names()
+
+# stop_search_2021_wards <- st_transform(stop_search_2021_wards,crs=4326)
+
+prc_balck_stops_per_area <- stop_search_2021_wards_pop%>%
+  filter(!is.na(area), area != "", !is.na(officer_defined_ethnicity))%>%
+  group_by(area, officer_defined_ethnicity)%>%
+  summarise(ethnic_stops = n())%>%
+  mutate(prc_ethnic_stops = ethnic_stops/sum(ethnic_stops))%>%
+  filter(officer_defined_ethnicity == "Black")
+
+prc_balck_stops_per_area <- merge(prc_balck_stops_per_area, data.frame(wards$NAME), by.x = "area", by.y = "wards.NAME", all.y = T)
+
+pal <-  colorNumeric("OrRd", stop_locations$intersection)
+
+
+map_london <- leaflet()%>%
+  addTiles(
+    options = tileOptions(minZoom = 10, maxZoom = 15)
+    )%>%
+  addControl("London Stop and Search Frequency", position = 'bottomleft')%>%
+  setMaxBounds(lng1 = -0.147949,
+               lng2 = -0.117949,
+               lat1 = 51.20775,
+               lat2 = 51.70775)%>%
+  addPolygons(data = wards,
+              color = 'blue',
+              fillOpacity = 0.05,
+              weight = 0.5,
+              fill = ,
+              popup = ~paste0(NAME," num. stops: ",stop_locations$intersection[stop_locations$area == NAME],
+                              "; ","Black Population: ",round(stop_search_2021_wards_pop$prc_black[which(stop_search_2021_wards_pop$area == NAME)]*100,2),"%",
+                              "; "))%>%
+  addHeatmap(group = "heat",
+             data = stop_locations%>%na.omit,
+             lng = ~as.numeric(stop_locations$X),
+             lat = ~as.numeric(stop_locations$Y),
+             intensity = stop_locations$intersection,
+             radius = 8,
+             minOpacity = 0.1,
+             max = 0.7,
+             gradient = "OrRd")%>%
+  addLegend(values = stop_locations$intersection%>%na.omit,
+            group = "heat",
+            pal =  colorNumeric("OrRd",stop_locations$intersection),
+            title = "Number of Stop and Searches")
+
+
+```
+
+
+```{r echo=FALSE}
+
+library(htmlwidgets)
+library(htmltools)
+
+saveWidget(map_london, here::here("static/leaflet","leafMap.html"))
+
+library(widgetframe)
+
+frameWidget(map_london)
+
+```
+
+
+
+
+
+```{r}
+library(tidyr)
+
+london_ethnic_dist <- data.frame(as.factor(c("White", "Black", "Asian", "Other")),
+                                 c(59.8,18.4,13.3, 8.4))
+
+colnames(london_ethnic_dist) <- c("ethnicity", "prc")
+  
+plot1 <- stop_search_2021%>%
+  janitor::clean_names()%>%
+  filter(!is.na(officer_defined_ethnicity), !is.na(self_defined_ethnicity))%>%
+  group_by(officer_defined_ethnicity)%>%
+  summarise(num_stops = n())%>%
+  mutate(prc_stops = round(num_stops/sum(num_stops)*100,2))%>%
+  mutate(prc = c(18.4,13.3, 8.4, 59.8))%>%
+  pivot_longer(cols = 3:4, names_to = "type", names_repair = "unique", values_to = "prc")%>%
+  ggplot()+
+  geom_col(aes(y = reorder(officer_defined_ethnicity, prc),
+               x = prc,
+               fill = type),
+           position = "dodge")+
+  geom_text(aes(y = reorder(officer_defined_ethnicity,prc),  
+                x = prc, 
+                label = paste0(prc,"%"),
+                group = type),
+            position = position_dodge(width = 1),
+            fontface = 2)+
+  theme_minimal()+
+  theme(panel.grid.major = element_blank(),
+        plot.caption.position = "plot",
+        plot.caption = element_text(vjust = 2, hjust = 0))+
+  labs(title = "40% of Stop and Searches conducted on 13% of Londons population",
+       y = "",
+       x = "% of Stop and Search Conducted in 2021 September",
+       caption = "NOTE: Ethnicity Breakdown of London from Wikipedia")+
+  scale_fill_manual(values=c("skyblue", "tomato"), 
+                       name="% distribution",
+                       
+                       labels=c("Ethnic Distribution of London", "Stop and Search Ethnic Distribution"))
+  
+
+plot1
+
+plot2 <- stop_search_2021%>%
+  janitor::clean_names()%>%
+  filter(!is.na(officer_defined_ethnicity), !is.na(self_defined_ethnicity))%>%
+  mutate(self_id = case_when(grepl("Black",self_defined_ethnicity)~"Black",
+                             grepl("White",self_defined_ethnicity)~"White",
+                             grepl("Asian",self_defined_ethnicity)~"Asian",
+                             TRUE ~ "Other"))%>%
+  pivot_longer(cols = c(self_id, officer_defined_ethnicity), names_to = "classificaiton_type", values_to = "ethnicity")%>%
+  group_by(classificaiton_type, ethnicity)%>%
+  summarise(num_stops = n())%>%
+  mutate(prc_stops = round(num_stops/sum(num_stops)*100,2))%>%
+  ggplot()+
+  geom_col(aes(y = reorder(ethnicity, prc_stops),
+               x = prc_stops,
+               fill = classificaiton_type),
+           position = "dodge")+
+  geom_text(aes(y = reorder(ethnicity,prc_stops),  
+                x = prc_stops, 
+                label = paste0(prc_stops,"%"),
+                group = classificaiton_type),
+            position = position_dodge(width = 1),
+            fontface = 2)+
+  theme_minimal()+
+  theme(panel.grid.major = element_blank(),
+        plot.caption.position = "plot",
+        plot.caption = element_text(vjust = 2, hjust = 0))+
+  labs(title = "Only 63% of People Identified as Black by Officers Self Identify as that",
+       y = "",
+       x = "% of Stop and Search Conducted in 2021 September")+
+  scale_fill_manual(values=c( "tomato", "skyblue"), 
+                       name="",
+                       
+                       labels=c("Self Defined Ethnicity", "Officer Defined Ethicity"))
+  
+
+plot2
+
+
+
+
+```
+
+
