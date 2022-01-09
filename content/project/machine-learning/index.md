@@ -3,7 +3,10 @@
 tags: 
   - ML
 
-author: "Kazmer Nagy-Betegh"
+author: 
+  - admin
+  
+summary: "This is an overview of one of my machine learning assignments that I have completed at UCL"
 
 title: "Face Categorisation using Python"
 

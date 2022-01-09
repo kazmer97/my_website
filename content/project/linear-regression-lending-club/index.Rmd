@@ -6,11 +6,13 @@ authors:
 
 tags:
   - ML
+  
+summary: "This is a short intro to linear regression with exampls inspired by my Data Science for Business class at LBS."
 
 image:
   caption: ""
   focal_point: ""
-  preview_only: false
+  preview_only: true
   
   html_document:
     theme: cerulean

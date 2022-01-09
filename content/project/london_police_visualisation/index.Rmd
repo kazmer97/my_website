@@ -6,6 +6,9 @@ date: "`r Sys.Date()`"
 
 tags:
   - DataVis
+  
+summary: "Here are some results from my workings with the the London metropolitan police data for a LBS school assignment and the visualisations I have come up with."  
+
 ---
 
 
@@ -194,8 +197,6 @@ map_london <- leaflet()%>%
 
 ```
 
-
-<iframe seamless src="/leaflet/leafMap.html" width="100%" height="500"></iframe>
 
 
 

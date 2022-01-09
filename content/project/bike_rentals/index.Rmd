@@ -2,8 +2,11 @@
 tags:
   - DataVis
   
+summary: "Some visualisation around London Bike Rentals; Page Still under construction, Futher insights and examplanations will be added"
+  
 title: "Bike Rental Data London"
-author: "Kazmer Nagy-Betegh"
+author: 
+  - admin
 date: "`r Sys.Date()`"
 output:
   html_document:
@@ -14,7 +17,13 @@ output:
     toc_float: yes
     code_folding: show
     # df_print: paged
-    
+
+
+image: 
+  caption: ""
+  focal_point: ""
+  preview_only: true
+  
 ---
 
 ### Page Still under construction, Futher insights and examplanations will be added

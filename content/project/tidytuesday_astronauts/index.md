@@ -2,13 +2,14 @@
 # Documentation: https://wowchemy.com/docs/managing-content/
 
 title: "Tidytuesday Astronauts Dataset Dashboard"
-summary: ""
+summary: "Dashboard with insights from the Astronut dataset from Tidy Tuesday Challange"
 authors: 
   - admin
 tags: 
   - DataVis
 categories:
 date: 2021-12-01T22:49:41Z
+
 
 # Optional external URL for project (replaces project detail page).
 external_link: https://rpubs.com/kazmer97/astronauts_space_story

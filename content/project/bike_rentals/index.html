@@ -2,9 +2,12 @@
 tags:
   - DataVis
   
+summary: "Some visualisation around London Bike Rentals; Page Still under construction, Futher insights and examplanations will be added"
+  
 title: "Bike Rental Data London"
-author: "Kazmer Nagy-Betegh"
-date: "2021-09-28"
+author: 
+  - admin
+date: "2022-01-09"
 output:
   html_document:
     theme: flatly
@@ -14,7 +17,13 @@ output:
     toc_float: yes
     code_folding: show
     # df_print: paged
-    
+
+
+image: 
+  caption: ""
+  focal_point: ""
+  preview_only: true
+  
 ---
 
 <script src="{{< blogdown/postref >}}index_files/header-attrs/header-attrs.js"></script>
@@ -30,12 +39,12 @@ output:
 
 # Download TFL data to temporary file
 httr::GET(url, write_disk(bike.temp &lt;- tempfile(fileext = &quot;.xlsx&quot;)))</code></pre>
-<pre><code>## Response [https://airdrive-secure.s3-eu-west-1.amazonaws.com/london/dataset/number-bicycle-hires/2021-08-23T14%3A32%3A29/tfl-daily-cycle-hires.xlsx?X-Amz-Algorithm=AWS4-HMAC-SHA256&amp;X-Amz-Credential=AKIAJJDIMAIVZJDICKHA%2F20210914%2Feu-west-1%2Fs3%2Faws4_request&amp;X-Amz-Date=20210914T210336Z&amp;X-Amz-Expires=300&amp;X-Amz-Signature=2c9edd28f85ce6f949f4804a0385727edd31b53e2b898612ac79dd07d65d0e3b&amp;X-Amz-SignedHeaders=host]
-##   Date: 2021-09-14 21:07
+<pre><code>## Response [https://airdrive-secure.s3-eu-west-1.amazonaws.com/london/dataset/number-bicycle-hires/2021-12-20T06%3A47%3A04/tfl-daily-cycle-hires.xlsx?X-Amz-Algorithm=AWS4-HMAC-SHA256&amp;X-Amz-Credential=AKIAJJDIMAIVZJDICKHA%2F20220109%2Feu-west-1%2Fs3%2Faws4_request&amp;X-Amz-Date=20220109T164559Z&amp;X-Amz-Expires=300&amp;X-Amz-Signature=618b8aa86d97e1998bd14fe2a3f70fc97ac4b29b4de27607e836b5c2c63936f3&amp;X-Amz-SignedHeaders=host]
+##   Date: 2022-01-09 16:46
 ##   Status: 200
 ##   Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet
-##   Size: 173 kB
-## &lt;ON DISK&gt;  /var/folders/h6/kmqd84j93_z506mgbtp4kqpm0000gn/T//RtmpZedoSQ/filee4fc232afd14.xlsx</code></pre>
+##   Size: 176 kB
+## &lt;ON DISK&gt;  /var/folders/4d/wfrqtf8n1yz65xx86ycctqb40000gn/T//RtmpI3mf7y/file10fac2609d94e.xlsx</code></pre>
 <pre class="r"><code># Use read_excel to read it as dataframe
 bike0 &lt;- read_excel(bike.temp,
                    sheet = &quot;Data&quot;,

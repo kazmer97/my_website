@@ -1,16 +1,18 @@
 ---
 title: "Linear Regression to Predict Interest Rate"
-date: "2021-10-12"
+date: "2022-01-09"
 authors:
   - admin
 
 tags:
   - ML
+  
+summary: "This is a short intro to linear regression with exampls inspired by my Data Science for Business class at LBS."
 
 image:
   caption: ""
   focal_point: ""
-  preview_only: false
+  preview_only: true
   
   html_document:
     theme: cerulean
@@ -594,7 +596,7 @@ rmse_testing&lt;- Metrics::rmse(pred,testing$int_rate)</code></pre>
 control &lt;- trainControl (
     method=&quot;cv&quot;,
     number=10,
-    verboseIter=TRUE) #by setting this to true the model will report its progress after each estimation
+    verboseIter=F) #by setting this to true the model will report its progress after each estimation
 
 #we are going to train the model and report the results using k-fold cross validation
 
@@ -603,30 +605,10 @@ plsFit&lt;-train(
     lc_clean,
    method = &quot;lm&quot;,
     trControl = control
-   )</code></pre>
-<pre><code>## + Fold01: intercept=TRUE 
-## - Fold01: intercept=TRUE 
-## + Fold02: intercept=TRUE 
-## - Fold02: intercept=TRUE 
-## + Fold03: intercept=TRUE 
-## - Fold03: intercept=TRUE 
-## + Fold04: intercept=TRUE 
-## - Fold04: intercept=TRUE 
-## + Fold05: intercept=TRUE 
-## - Fold05: intercept=TRUE 
-## + Fold06: intercept=TRUE 
-## - Fold06: intercept=TRUE 
-## + Fold07: intercept=TRUE 
-## - Fold07: intercept=TRUE 
-## + Fold08: intercept=TRUE 
-## - Fold08: intercept=TRUE 
-## + Fold09: intercept=TRUE 
-## - Fold09: intercept=TRUE 
-## + Fold10: intercept=TRUE 
-## - Fold10: intercept=TRUE 
-## Aggregating results
-## Fitting final model on full training set</code></pre>
-<pre class="r"><code>summary(plsFit)</code></pre>
+   )
+  
+
+summary(plsFit)</code></pre>
 <pre><code>## 
 ## Call:
 ## lm(formula = .outcome ~ ., data = dat)
@@ -663,7 +645,7 @@ plsFit&lt;-train(
 <pre class="r"><code>control &lt;- trainControl (
     method=&quot;cv&quot;,
     number=5,
-    verboseIter=TRUE) #by setting this to true the model will report its progress after each estimation
+    verboseIter=F) #by setting this to true the model will report its progress after each estimation
 
 #we are going to train the model and report the results using k-fold cross validation
 
@@ -672,20 +654,10 @@ plsFit&lt;-train(
     lc_clean,
    method = &quot;lm&quot;,
     trControl = control
-   )</code></pre>
-<pre><code>## + Fold1: intercept=TRUE 
-## - Fold1: intercept=TRUE 
-## + Fold2: intercept=TRUE 
-## - Fold2: intercept=TRUE 
-## + Fold3: intercept=TRUE 
-## - Fold3: intercept=TRUE 
-## + Fold4: intercept=TRUE 
-## - Fold4: intercept=TRUE 
-## + Fold5: intercept=TRUE 
-## - Fold5: intercept=TRUE 
-## Aggregating results
-## Fitting final model on full training set</code></pre>
-<pre class="r"><code>summary(plsFit)</code></pre>
+   )
+  
+
+summary(plsFit)</code></pre>
 <pre><code>## 
 ## Call:
 ## lm(formula = .outcome ~ ., data = dat)
@@ -722,7 +694,7 @@ plsFit&lt;-train(
 <pre class="r"><code>control &lt;- trainControl (
     method=&quot;cv&quot;,
     number=15,
-    verboseIter=TRUE) #by setting this to true the model will report its progress after each estimation
+    verboseIter=F) #by setting this to true the model will report its progress after each estimation
 
 #we are going to train the model and report the results using k-fold cross validation
 
@@ -731,40 +703,10 @@ plsFit&lt;-train(
     lc_clean,
    method = &quot;lm&quot;,
     trControl = control
-   )</code></pre>
-<pre><code>## + Fold01: intercept=TRUE 
-## - Fold01: intercept=TRUE 
-## + Fold02: intercept=TRUE 
-## - Fold02: intercept=TRUE 
-## + Fold03: intercept=TRUE 
-## - Fold03: intercept=TRUE 
-## + Fold04: intercept=TRUE 
-## - Fold04: intercept=TRUE 
-## + Fold05: intercept=TRUE 
-## - Fold05: intercept=TRUE 
-## + Fold06: intercept=TRUE 
-## - Fold06: intercept=TRUE 
-## + Fold07: intercept=TRUE 
-## - Fold07: intercept=TRUE 
-## + Fold08: intercept=TRUE 
-## - Fold08: intercept=TRUE 
-## + Fold09: intercept=TRUE 
-## - Fold09: intercept=TRUE 
-## + Fold10: intercept=TRUE 
-## - Fold10: intercept=TRUE 
-## + Fold11: intercept=TRUE 
-## - Fold11: intercept=TRUE 
-## + Fold12: intercept=TRUE 
-## - Fold12: intercept=TRUE 
-## + Fold13: intercept=TRUE 
-## - Fold13: intercept=TRUE 
-## + Fold14: intercept=TRUE 
-## - Fold14: intercept=TRUE 
-## + Fold15: intercept=TRUE 
-## - Fold15: intercept=TRUE 
-## Aggregating results
-## Fitting final model on full training set</code></pre>
-<pre class="r"><code>summary(plsFit)</code></pre>
+   )
+  
+
+summary(plsFit)</code></pre>
 <pre><code>## 
 ## Call:
 ## lm(formula = .outcome ~ ., data = dat)
@@ -885,41 +827,10 @@ lasso &lt;- train(
   preProc = c(&quot;center&quot;, &quot;scale&quot;), #This option standardizes the data before running the LASSO regression
   trControl = control,
   tuneGrid = expand.grid(alpha = 1, lambda = lambda_seq) #alpha=1 specifies to run a LASSO regression. If alpha=0 the model would run ridge regression.
-  )</code></pre>
-<pre><code>## + Fold01: alpha=1, lambda=0.01 
-## - Fold01: alpha=1, lambda=0.01 
-## + Fold02: alpha=1, lambda=0.01 
-## - Fold02: alpha=1, lambda=0.01 
-## + Fold03: alpha=1, lambda=0.01 
-## - Fold03: alpha=1, lambda=0.01 
-## + Fold04: alpha=1, lambda=0.01 
-## - Fold04: alpha=1, lambda=0.01 
-## + Fold05: alpha=1, lambda=0.01 
-## - Fold05: alpha=1, lambda=0.01 
-## + Fold06: alpha=1, lambda=0.01 
-## - Fold06: alpha=1, lambda=0.01 
-## + Fold07: alpha=1, lambda=0.01 
-## - Fold07: alpha=1, lambda=0.01 
-## + Fold08: alpha=1, lambda=0.01 
-## - Fold08: alpha=1, lambda=0.01 
-## + Fold09: alpha=1, lambda=0.01 
-## - Fold09: alpha=1, lambda=0.01 
-## + Fold10: alpha=1, lambda=0.01 
-## - Fold10: alpha=1, lambda=0.01 
-## + Fold11: alpha=1, lambda=0.01 
-## - Fold11: alpha=1, lambda=0.01 
-## + Fold12: alpha=1, lambda=0.01 
-## - Fold12: alpha=1, lambda=0.01 
-## + Fold13: alpha=1, lambda=0.01 
-## - Fold13: alpha=1, lambda=0.01 
-## + Fold14: alpha=1, lambda=0.01 
-## - Fold14: alpha=1, lambda=0.01 
-## + Fold15: alpha=1, lambda=0.01 
-## - Fold15: alpha=1, lambda=0.01 
-## Aggregating results
-## Selecting tuning parameters
-## Fitting alpha = 1, lambda = 0.00029 on full training set</code></pre>
-<pre class="r"><code># Model coefficients
+  )
+
+
+# Model coefficients
 coef(lasso$finalModel, lasso$bestTune$lambda)</code></pre>
 <pre><code>## 58 x 1 sparse Matrix of class &quot;dgCMatrix&quot;
 ##                                              s1
@@ -972,7 +883,7 @@ coef(lasso$finalModel, lasso$bestTune$lambda)</code></pre>
 ## poly(loan_amnt, 3)1:term36:gradeF  .           
 ## poly(loan_amnt, 3)2:term36:gradeF  .           
 ## poly(loan_amnt, 3)3:term36:gradeF  .           
-## poly(loan_amnt, 3)1:term60:gradeF -7.541315e-06
+## poly(loan_amnt, 3)1:term60:gradeF -7.541316e-06
 ## poly(loan_amnt, 3)2:term60:gradeF  .           
 ## poly(loan_amnt, 3)3:term60:gradeF  1.395437e-03
 ## poly(loan_amnt, 3)1:term36:gradeG  .           
@@ -1054,40 +965,9 @@ time1&lt;-train(
   int_rate ~ loan_amnt + term+ dti + annual_inc + grade +grade:loan_amnt+ issue_d,#fill your variables here &quot;+ issue_d&quot;
   lc_clean,
   method = &quot;lm&quot;,
-  trControl = control)</code></pre>
-<pre><code>## + Fold01: intercept=TRUE 
-## - Fold01: intercept=TRUE 
-## + Fold02: intercept=TRUE 
-## - Fold02: intercept=TRUE 
-## + Fold03: intercept=TRUE 
-## - Fold03: intercept=TRUE 
-## + Fold04: intercept=TRUE 
-## - Fold04: intercept=TRUE 
-## + Fold05: intercept=TRUE 
-## - Fold05: intercept=TRUE 
-## + Fold06: intercept=TRUE 
-## - Fold06: intercept=TRUE 
-## + Fold07: intercept=TRUE 
-## - Fold07: intercept=TRUE 
-## + Fold08: intercept=TRUE 
-## - Fold08: intercept=TRUE 
-## + Fold09: intercept=TRUE 
-## - Fold09: intercept=TRUE 
-## + Fold10: intercept=TRUE 
-## - Fold10: intercept=TRUE 
-## + Fold11: intercept=TRUE 
-## - Fold11: intercept=TRUE 
-## + Fold12: intercept=TRUE 
-## - Fold12: intercept=TRUE 
-## + Fold13: intercept=TRUE 
-## - Fold13: intercept=TRUE 
-## + Fold14: intercept=TRUE 
-## - Fold14: intercept=TRUE 
-## + Fold15: intercept=TRUE 
-## - Fold15: intercept=TRUE 
-## Aggregating results
-## Fitting final model on full training set</code></pre>
-<pre class="r"><code>summary(time1)</code></pre>
+  trControl = control)
+
+summary(time1)</code></pre>
 <pre><code>## 
 ## Call:
 ## lm(formula = .outcome ~ ., data = dat)
@@ -1128,40 +1008,10 @@ time2&lt;-train(
     lc_clean,
    method = &quot;lm&quot;,
     trControl = control
-   )</code></pre>
-<pre><code>## + Fold01: intercept=TRUE 
-## - Fold01: intercept=TRUE 
-## + Fold02: intercept=TRUE 
-## - Fold02: intercept=TRUE 
-## + Fold03: intercept=TRUE 
-## - Fold03: intercept=TRUE 
-## + Fold04: intercept=TRUE 
-## - Fold04: intercept=TRUE 
-## + Fold05: intercept=TRUE 
-## - Fold05: intercept=TRUE 
-## + Fold06: intercept=TRUE 
-## - Fold06: intercept=TRUE 
-## + Fold07: intercept=TRUE 
-## - Fold07: intercept=TRUE 
-## + Fold08: intercept=TRUE 
-## - Fold08: intercept=TRUE 
-## + Fold09: intercept=TRUE 
-## - Fold09: intercept=TRUE 
-## + Fold10: intercept=TRUE 
-## - Fold10: intercept=TRUE 
-## + Fold11: intercept=TRUE 
-## - Fold11: intercept=TRUE 
-## + Fold12: intercept=TRUE 
-## - Fold12: intercept=TRUE 
-## + Fold13: intercept=TRUE 
-## - Fold13: intercept=TRUE 
-## + Fold14: intercept=TRUE 
-## - Fold14: intercept=TRUE 
-## + Fold15: intercept=TRUE 
-## - Fold15: intercept=TRUE 
-## Aggregating results
-## Fitting final model on full training set</code></pre>
-<pre class="r"><code>summary(time2)</code></pre>
+   )
+  
+
+summary(time2)</code></pre>
 <pre><code>## 
 ## Call:
 ## lm(formula = .outcome ~ ., data = dat)
@@ -1215,40 +1065,8 @@ time3&lt;-train(
      method = &quot;lm&quot;,
     trControl = control
    )</code></pre>
-<pre><code>## + Fold01: intercept=TRUE 
-## - Fold01: intercept=TRUE 
-## + Fold02: intercept=TRUE 
-## - Fold02: intercept=TRUE 
-## + Fold03: intercept=TRUE 
-## - Fold03: intercept=TRUE 
-## + Fold04: intercept=TRUE 
-## - Fold04: intercept=TRUE 
-## + Fold05: intercept=TRUE 
-## - Fold05: intercept=TRUE 
-## + Fold06: intercept=TRUE 
-## - Fold06: intercept=TRUE 
-## + Fold07: intercept=TRUE 
-## - Fold07: intercept=TRUE 
-## + Fold08: intercept=TRUE 
-## - Fold08: intercept=TRUE 
-## + Fold09: intercept=TRUE 
-## - Fold09: intercept=TRUE 
-## + Fold10: intercept=TRUE 
-## - Fold10: intercept=TRUE 
-## + Fold11: intercept=TRUE 
-## - Fold11: intercept=TRUE 
-## + Fold12: intercept=TRUE 
-## - Fold12: intercept=TRUE 
-## + Fold13: intercept=TRUE 
-## - Fold13: intercept=TRUE 
-## + Fold14: intercept=TRUE 
-## - Fold14: intercept=TRUE 
-## + Fold15: intercept=TRUE</code></pre>
 <pre><code>## Warning in predict.lm(modelFit, newdata): prediction from a rank-deficient fit
 ## may be misleading</code></pre>
-<pre><code>## - Fold15: intercept=TRUE 
-## Aggregating results
-## Fitting final model on full training set</code></pre>
 <pre class="r"><code>summary(time3)</code></pre>
 <pre><code>## 
 ## Call:
@@ -1308,68 +1126,50 @@ time4&lt;-train(
      method = &quot;lm&quot;,
     trControl = control
    )</code></pre>
-<pre><code>## + Fold01: intercept=TRUE</code></pre>
 <pre><code>## Warning in predict.lm(modelFit, newdata): prediction from a rank-deficient fit
+## may be misleading
+
+## Warning in predict.lm(modelFit, newdata): prediction from a rank-deficient fit
+## may be misleading
+
+## Warning in predict.lm(modelFit, newdata): prediction from a rank-deficient fit
+## may be misleading
+
+## Warning in predict.lm(modelFit, newdata): prediction from a rank-deficient fit
+## may be misleading
+
+## Warning in predict.lm(modelFit, newdata): prediction from a rank-deficient fit
+## may be misleading
+
+## Warning in predict.lm(modelFit, newdata): prediction from a rank-deficient fit
+## may be misleading
+
+## Warning in predict.lm(modelFit, newdata): prediction from a rank-deficient fit
+## may be misleading
+
+## Warning in predict.lm(modelFit, newdata): prediction from a rank-deficient fit
+## may be misleading
+
+## Warning in predict.lm(modelFit, newdata): prediction from a rank-deficient fit
+## may be misleading
+
+## Warning in predict.lm(modelFit, newdata): prediction from a rank-deficient fit
+## may be misleading
+
+## Warning in predict.lm(modelFit, newdata): prediction from a rank-deficient fit
+## may be misleading
+
+## Warning in predict.lm(modelFit, newdata): prediction from a rank-deficient fit
+## may be misleading
+
+## Warning in predict.lm(modelFit, newdata): prediction from a rank-deficient fit
+## may be misleading
+
+## Warning in predict.lm(modelFit, newdata): prediction from a rank-deficient fit
+## may be misleading
+
+## Warning in predict.lm(modelFit, newdata): prediction from a rank-deficient fit
 ## may be misleading</code></pre>
-<pre><code>## - Fold01: intercept=TRUE 
-## + Fold02: intercept=TRUE</code></pre>
-<pre><code>## Warning in predict.lm(modelFit, newdata): prediction from a rank-deficient fit
-## may be misleading</code></pre>
-<pre><code>## - Fold02: intercept=TRUE 
-## + Fold03: intercept=TRUE</code></pre>
-<pre><code>## Warning in predict.lm(modelFit, newdata): prediction from a rank-deficient fit
-## may be misleading</code></pre>
-<pre><code>## - Fold03: intercept=TRUE 
-## + Fold04: intercept=TRUE</code></pre>
-<pre><code>## Warning in predict.lm(modelFit, newdata): prediction from a rank-deficient fit
-## may be misleading</code></pre>
-<pre><code>## - Fold04: intercept=TRUE 
-## + Fold05: intercept=TRUE</code></pre>
-<pre><code>## Warning in predict.lm(modelFit, newdata): prediction from a rank-deficient fit
-## may be misleading</code></pre>
-<pre><code>## - Fold05: intercept=TRUE 
-## + Fold06: intercept=TRUE</code></pre>
-<pre><code>## Warning in predict.lm(modelFit, newdata): prediction from a rank-deficient fit
-## may be misleading</code></pre>
-<pre><code>## - Fold06: intercept=TRUE 
-## + Fold07: intercept=TRUE</code></pre>
-<pre><code>## Warning in predict.lm(modelFit, newdata): prediction from a rank-deficient fit
-## may be misleading</code></pre>
-<pre><code>## - Fold07: intercept=TRUE 
-## + Fold08: intercept=TRUE</code></pre>
-<pre><code>## Warning in predict.lm(modelFit, newdata): prediction from a rank-deficient fit
-## may be misleading</code></pre>
-<pre><code>## - Fold08: intercept=TRUE 
-## + Fold09: intercept=TRUE</code></pre>
-<pre><code>## Warning in predict.lm(modelFit, newdata): prediction from a rank-deficient fit
-## may be misleading</code></pre>
-<pre><code>## - Fold09: intercept=TRUE 
-## + Fold10: intercept=TRUE</code></pre>
-<pre><code>## Warning in predict.lm(modelFit, newdata): prediction from a rank-deficient fit
-## may be misleading</code></pre>
-<pre><code>## - Fold10: intercept=TRUE 
-## + Fold11: intercept=TRUE</code></pre>
-<pre><code>## Warning in predict.lm(modelFit, newdata): prediction from a rank-deficient fit
-## may be misleading</code></pre>
-<pre><code>## - Fold11: intercept=TRUE 
-## + Fold12: intercept=TRUE</code></pre>
-<pre><code>## Warning in predict.lm(modelFit, newdata): prediction from a rank-deficient fit
-## may be misleading</code></pre>
-<pre><code>## - Fold12: intercept=TRUE 
-## + Fold13: intercept=TRUE</code></pre>
-<pre><code>## Warning in predict.lm(modelFit, newdata): prediction from a rank-deficient fit
-## may be misleading</code></pre>
-<pre><code>## - Fold13: intercept=TRUE 
-## + Fold14: intercept=TRUE</code></pre>
-<pre><code>## Warning in predict.lm(modelFit, newdata): prediction from a rank-deficient fit
-## may be misleading</code></pre>
-<pre><code>## - Fold14: intercept=TRUE 
-## + Fold15: intercept=TRUE</code></pre>
-<pre><code>## Warning in predict.lm(modelFit, newdata): prediction from a rank-deficient fit
-## may be misleading</code></pre>
-<pre><code>## - Fold15: intercept=TRUE 
-## Aggregating results
-## Fitting final model on full training set</code></pre>
 <pre class="r"><code>summary(time4)</code></pre>
 <pre><code>## 
 ## Call:
@@ -1621,40 +1421,8 @@ plsFit&lt;-train(
     lc_with_bonds,
    method = &quot;lm&quot;,
     trControl = control
-   )</code></pre>
-<pre><code>## + Fold01: intercept=TRUE 
-## - Fold01: intercept=TRUE 
-## + Fold02: intercept=TRUE 
-## - Fold02: intercept=TRUE 
-## + Fold03: intercept=TRUE 
-## - Fold03: intercept=TRUE 
-## + Fold04: intercept=TRUE 
-## - Fold04: intercept=TRUE 
-## + Fold05: intercept=TRUE 
-## - Fold05: intercept=TRUE 
-## + Fold06: intercept=TRUE 
-## - Fold06: intercept=TRUE 
-## + Fold07: intercept=TRUE 
-## - Fold07: intercept=TRUE 
-## + Fold08: intercept=TRUE 
-## - Fold08: intercept=TRUE 
-## + Fold09: intercept=TRUE 
-## - Fold09: intercept=TRUE 
-## + Fold10: intercept=TRUE 
-## - Fold10: intercept=TRUE 
-## + Fold11: intercept=TRUE 
-## - Fold11: intercept=TRUE 
-## + Fold12: intercept=TRUE 
-## - Fold12: intercept=TRUE 
-## + Fold13: intercept=TRUE 
-## - Fold13: intercept=TRUE 
-## + Fold14: intercept=TRUE 
-## - Fold14: intercept=TRUE 
-## + Fold15: intercept=TRUE 
-## - Fold15: intercept=TRUE 
-## Aggregating results
-## Fitting final model on full training set</code></pre>
-<pre class="r"><code>summary(plsFit)</code></pre>
+   )
+summary(plsFit)</code></pre>
 <pre><code>## 
 ## Call:
 ## lm(formula = .outcome ~ ., data = dat)
@@ -1707,7 +1475,7 @@ plsFit&lt;-train(
 control &lt;- trainControl (
     method=&quot;cv&quot;,
     number=10,
-    verboseIter=T) #by setting this to true the model will report its progress after each estimation
+    verboseIter=F) #by setting this to true the model will report its progress after each estimation
 
 #we are going to train the model and report the results using k-fold cross validation
 
@@ -1716,30 +1484,10 @@ impr_model1&lt;-train(
     lc_with_bonds,
    method = &quot;lm&quot;,
     trControl = control
-   )</code></pre>
-<pre><code>## + Fold01: intercept=TRUE 
-## - Fold01: intercept=TRUE 
-## + Fold02: intercept=TRUE 
-## - Fold02: intercept=TRUE 
-## + Fold03: intercept=TRUE 
-## - Fold03: intercept=TRUE 
-## + Fold04: intercept=TRUE 
-## - Fold04: intercept=TRUE 
-## + Fold05: intercept=TRUE 
-## - Fold05: intercept=TRUE 
-## + Fold06: intercept=TRUE 
-## - Fold06: intercept=TRUE 
-## + Fold07: intercept=TRUE 
-## - Fold07: intercept=TRUE 
-## + Fold08: intercept=TRUE 
-## - Fold08: intercept=TRUE 
-## + Fold09: intercept=TRUE 
-## - Fold09: intercept=TRUE 
-## + Fold10: intercept=TRUE 
-## - Fold10: intercept=TRUE 
-## Aggregating results
-## Fitting final model on full training set</code></pre>
-<pre class="r"><code>summary(impr_model1)</code></pre>
+   )
+  
+
+summary(impr_model1)</code></pre>
 <pre><code>## 
 ## Call:
 ## lm(formula = .outcome ~ ., data = dat)
@@ -1786,30 +1534,9 @@ impr_model1&lt;-train(
     lc_with_bonds,
    method = &quot;lm&quot;,
     trControl = control
-   )</code></pre>
-<pre><code>## + Fold01: intercept=TRUE 
-## - Fold01: intercept=TRUE 
-## + Fold02: intercept=TRUE 
-## - Fold02: intercept=TRUE 
-## + Fold03: intercept=TRUE 
-## - Fold03: intercept=TRUE 
-## + Fold04: intercept=TRUE 
-## - Fold04: intercept=TRUE 
-## + Fold05: intercept=TRUE 
-## - Fold05: intercept=TRUE 
-## + Fold06: intercept=TRUE 
-## - Fold06: intercept=TRUE 
-## + Fold07: intercept=TRUE 
-## - Fold07: intercept=TRUE 
-## + Fold08: intercept=TRUE 
-## - Fold08: intercept=TRUE 
-## + Fold09: intercept=TRUE 
-## - Fold09: intercept=TRUE 
-## + Fold10: intercept=TRUE 
-## - Fold10: intercept=TRUE 
-## Aggregating results
-## Fitting final model on full training set</code></pre>
-<pre class="r"><code>summary(impr_model2)</code></pre>
+   )
+  
+summary(impr_model2)</code></pre>
 <pre><code>## 
 ## Call:
 ## lm(formula = .outcome ~ ., data = dat)
@@ -1885,30 +1612,9 @@ impr_model1&lt;-train(
     lc_with_bonds,
    method = &quot;lm&quot;,
     trControl = control
-   )</code></pre>
-<pre><code>## + Fold01: intercept=TRUE 
-## - Fold01: intercept=TRUE 
-## + Fold02: intercept=TRUE 
-## - Fold02: intercept=TRUE 
-## + Fold03: intercept=TRUE 
-## - Fold03: intercept=TRUE 
-## + Fold04: intercept=TRUE 
-## - Fold04: intercept=TRUE 
-## + Fold05: intercept=TRUE 
-## - Fold05: intercept=TRUE 
-## + Fold06: intercept=TRUE 
-## - Fold06: intercept=TRUE 
-## + Fold07: intercept=TRUE 
-## - Fold07: intercept=TRUE 
-## + Fold08: intercept=TRUE 
-## - Fold08: intercept=TRUE 
-## + Fold09: intercept=TRUE 
-## - Fold09: intercept=TRUE 
-## + Fold10: intercept=TRUE 
-## - Fold10: intercept=TRUE 
-## Aggregating results
-## Fitting final model on full training set</code></pre>
-<pre class="r"><code>summary(impr_model3)</code></pre>
+   )
+
+summary(impr_model3)</code></pre>
 <pre><code>## 
 ## Call:
 ## lm(formula = .outcome ~ ., data = dat)
@@ -1960,48 +1666,35 @@ impr_model1&lt;-train(
    method = &quot;lm&quot;,
     trControl = control
    )</code></pre>
-<pre><code>## + Fold01: intercept=TRUE</code></pre>
 <pre><code>## Warning in predict.lm(modelFit, newdata): prediction from a rank-deficient fit
+## may be misleading
+
+## Warning in predict.lm(modelFit, newdata): prediction from a rank-deficient fit
+## may be misleading
+
+## Warning in predict.lm(modelFit, newdata): prediction from a rank-deficient fit
+## may be misleading
+
+## Warning in predict.lm(modelFit, newdata): prediction from a rank-deficient fit
+## may be misleading
+
+## Warning in predict.lm(modelFit, newdata): prediction from a rank-deficient fit
+## may be misleading
+
+## Warning in predict.lm(modelFit, newdata): prediction from a rank-deficient fit
+## may be misleading
+
+## Warning in predict.lm(modelFit, newdata): prediction from a rank-deficient fit
+## may be misleading
+
+## Warning in predict.lm(modelFit, newdata): prediction from a rank-deficient fit
+## may be misleading
+
+## Warning in predict.lm(modelFit, newdata): prediction from a rank-deficient fit
+## may be misleading
+
+## Warning in predict.lm(modelFit, newdata): prediction from a rank-deficient fit
 ## may be misleading</code></pre>
-<pre><code>## - Fold01: intercept=TRUE 
-## + Fold02: intercept=TRUE</code></pre>
-<pre><code>## Warning in predict.lm(modelFit, newdata): prediction from a rank-deficient fit
-## may be misleading</code></pre>
-<pre><code>## - Fold02: intercept=TRUE 
-## + Fold03: intercept=TRUE</code></pre>
-<pre><code>## Warning in predict.lm(modelFit, newdata): prediction from a rank-deficient fit
-## may be misleading</code></pre>
-<pre><code>## - Fold03: intercept=TRUE 
-## + Fold04: intercept=TRUE</code></pre>
-<pre><code>## Warning in predict.lm(modelFit, newdata): prediction from a rank-deficient fit
-## may be misleading</code></pre>
-<pre><code>## - Fold04: intercept=TRUE 
-## + Fold05: intercept=TRUE</code></pre>
-<pre><code>## Warning in predict.lm(modelFit, newdata): prediction from a rank-deficient fit
-## may be misleading</code></pre>
-<pre><code>## - Fold05: intercept=TRUE 
-## + Fold06: intercept=TRUE</code></pre>
-<pre><code>## Warning in predict.lm(modelFit, newdata): prediction from a rank-deficient fit
-## may be misleading</code></pre>
-<pre><code>## - Fold06: intercept=TRUE 
-## + Fold07: intercept=TRUE</code></pre>
-<pre><code>## Warning in predict.lm(modelFit, newdata): prediction from a rank-deficient fit
-## may be misleading</code></pre>
-<pre><code>## - Fold07: intercept=TRUE 
-## + Fold08: intercept=TRUE</code></pre>
-<pre><code>## Warning in predict.lm(modelFit, newdata): prediction from a rank-deficient fit
-## may be misleading</code></pre>
-<pre><code>## - Fold08: intercept=TRUE 
-## + Fold09: intercept=TRUE</code></pre>
-<pre><code>## Warning in predict.lm(modelFit, newdata): prediction from a rank-deficient fit
-## may be misleading</code></pre>
-<pre><code>## - Fold09: intercept=TRUE 
-## + Fold10: intercept=TRUE</code></pre>
-<pre><code>## Warning in predict.lm(modelFit, newdata): prediction from a rank-deficient fit
-## may be misleading</code></pre>
-<pre><code>## - Fold10: intercept=TRUE 
-## Aggregating results
-## Fitting final model on full training set</code></pre>
 <pre class="r"><code>print(summary(impr_model4))</code></pre>
 <pre><code>## 
 ## Call:
@@ -2108,48 +1801,35 @@ impr_model1&lt;-train(
    method = &quot;lm&quot;,
     trControl = control
    )</code></pre>
-<pre><code>## + Fold01: intercept=TRUE</code></pre>
 <pre><code>## Warning in predict.lm(modelFit, newdata): prediction from a rank-deficient fit
+## may be misleading
+
+## Warning in predict.lm(modelFit, newdata): prediction from a rank-deficient fit
+## may be misleading
+
+## Warning in predict.lm(modelFit, newdata): prediction from a rank-deficient fit
+## may be misleading
+
+## Warning in predict.lm(modelFit, newdata): prediction from a rank-deficient fit
+## may be misleading
+
+## Warning in predict.lm(modelFit, newdata): prediction from a rank-deficient fit
+## may be misleading
+
+## Warning in predict.lm(modelFit, newdata): prediction from a rank-deficient fit
+## may be misleading
+
+## Warning in predict.lm(modelFit, newdata): prediction from a rank-deficient fit
+## may be misleading
+
+## Warning in predict.lm(modelFit, newdata): prediction from a rank-deficient fit
+## may be misleading
+
+## Warning in predict.lm(modelFit, newdata): prediction from a rank-deficient fit
+## may be misleading
+
+## Warning in predict.lm(modelFit, newdata): prediction from a rank-deficient fit
 ## may be misleading</code></pre>
-<pre><code>## - Fold01: intercept=TRUE 
-## + Fold02: intercept=TRUE</code></pre>
-<pre><code>## Warning in predict.lm(modelFit, newdata): prediction from a rank-deficient fit
-## may be misleading</code></pre>
-<pre><code>## - Fold02: intercept=TRUE 
-## + Fold03: intercept=TRUE</code></pre>
-<pre><code>## Warning in predict.lm(modelFit, newdata): prediction from a rank-deficient fit
-## may be misleading</code></pre>
-<pre><code>## - Fold03: intercept=TRUE 
-## + Fold04: intercept=TRUE</code></pre>
-<pre><code>## Warning in predict.lm(modelFit, newdata): prediction from a rank-deficient fit
-## may be misleading</code></pre>
-<pre><code>## - Fold04: intercept=TRUE 
-## + Fold05: intercept=TRUE</code></pre>
-<pre><code>## Warning in predict.lm(modelFit, newdata): prediction from a rank-deficient fit
-## may be misleading</code></pre>
-<pre><code>## - Fold05: intercept=TRUE 
-## + Fold06: intercept=TRUE</code></pre>
-<pre><code>## Warning in predict.lm(modelFit, newdata): prediction from a rank-deficient fit
-## may be misleading</code></pre>
-<pre><code>## - Fold06: intercept=TRUE 
-## + Fold07: intercept=TRUE</code></pre>
-<pre><code>## Warning in predict.lm(modelFit, newdata): prediction from a rank-deficient fit
-## may be misleading</code></pre>
-<pre><code>## - Fold07: intercept=TRUE 
-## + Fold08: intercept=TRUE</code></pre>
-<pre><code>## Warning in predict.lm(modelFit, newdata): prediction from a rank-deficient fit
-## may be misleading</code></pre>
-<pre><code>## - Fold08: intercept=TRUE 
-## + Fold09: intercept=TRUE</code></pre>
-<pre><code>## Warning in predict.lm(modelFit, newdata): prediction from a rank-deficient fit
-## may be misleading</code></pre>
-<pre><code>## - Fold09: intercept=TRUE 
-## + Fold10: intercept=TRUE</code></pre>
-<pre><code>## Warning in predict.lm(modelFit, newdata): prediction from a rank-deficient fit
-## may be misleading</code></pre>
-<pre><code>## - Fold10: intercept=TRUE 
-## Aggregating results
-## Fitting final model on full training set</code></pre>
 <pre class="r"><code>summary(impr_model5)</code></pre>
 <pre><code>## 
 ## Call:
@@ -2407,7 +2087,7 @@ testing &lt;- testing(train_test_split)
 control &lt;- trainControl (
     method=&quot;cv&quot;,
     number=10,
-    verboseIter=T) #by setting this to true the model will report its progress after each estimation
+    verboseIter=F) #by setting this to true the model will report its progress after each estimation
 
 
 lambda_seq &lt;- seq(0, 0.01, length = 1000)
@@ -2421,31 +2101,10 @@ lasso &lt;- train(
   preProc = c(&quot;center&quot;, &quot;scale&quot;), #This option standardizes the data before running the LASSO regression
   trControl = control,
   tuneGrid = expand.grid(alpha = 1, lambda = lambda_seq) #alpha=1 specifies to run a LASSO regression. If alpha=0 the model would run ridge regression.
-  )</code></pre>
-<pre><code>## + Fold01: alpha=1, lambda=0.01 
-## - Fold01: alpha=1, lambda=0.01 
-## + Fold02: alpha=1, lambda=0.01 
-## - Fold02: alpha=1, lambda=0.01 
-## + Fold03: alpha=1, lambda=0.01 
-## - Fold03: alpha=1, lambda=0.01 
-## + Fold04: alpha=1, lambda=0.01 
-## - Fold04: alpha=1, lambda=0.01 
-## + Fold05: alpha=1, lambda=0.01 
-## - Fold05: alpha=1, lambda=0.01 
-## + Fold06: alpha=1, lambda=0.01 
-## - Fold06: alpha=1, lambda=0.01 
-## + Fold07: alpha=1, lambda=0.01 
-## - Fold07: alpha=1, lambda=0.01 
-## + Fold08: alpha=1, lambda=0.01 
-## - Fold08: alpha=1, lambda=0.01 
-## + Fold09: alpha=1, lambda=0.01 
-## - Fold09: alpha=1, lambda=0.01 
-## + Fold10: alpha=1, lambda=0.01 
-## - Fold10: alpha=1, lambda=0.01 
-## Aggregating results
-## Selecting tuning parameters
-## Fitting alpha = 1, lambda = 0 on full training set</code></pre>
-<pre class="r"><code># Model coefficients
+  )
+
+
+# Model coefficients
 coef(lasso$finalModel, lasso$bestTune$lambda)</code></pre>
 <pre><code>## 127 x 1 sparse Matrix of class &quot;dgCMatrix&quot;
 ##                                              s1
@@ -2492,7 +2151,7 @@ coef(lasso$finalModel, lasso$bestTune$lambda)</code></pre>
 ## addr_stateVA                       .           
 ## addr_stateWA                       6.170835e-05
 ## addr_stateWI                       1.561012e-05
-## annual_inc                        -7.053376e-05
+## annual_inc                        -7.053377e-05
 ## installment:poly(loan_amnt, 3)1   -3.806753e-01
 ## installment:poly(loan_amnt, 3)2    1.103283e-01
 ## installment:poly(loan_amnt, 3)3   -1.866514e-04
@@ -2521,7 +2180,7 @@ coef(lasso$finalModel, lasso$bestTune$lambda)</code></pre>
 ## addr_stateKS:annual_inc           -9.398596e-05
 ## addr_stateKY:annual_inc            1.829080e-05
 ## addr_stateLA:annual_inc           -2.220243e-05
-## addr_stateMA:annual_inc           -2.487181e-07
+## addr_stateMA:annual_inc           -2.487178e-07
 ## addr_stateMD:annual_inc            4.627167e-05
 ## addr_stateMI:annual_inc            1.581939e-04
 ## addr_stateMN:annual_inc           -1.946698e-04
@@ -2551,7 +2210,7 @@ coef(lasso$finalModel, lasso$bestTune$lambda)</code></pre>
 ## poly(loan_amnt, 3)3:term36:gradeC -1.632666e-03
 ## poly(loan_amnt, 3)1:term60:gradeC -1.677279e-03
 ## poly(loan_amnt, 3)2:term60:gradeC  4.288533e-03
-## poly(loan_amnt, 3)3:term60:gradeC -2.093728e-05
+## poly(loan_amnt, 3)3:term60:gradeC -2.093729e-05
 ## poly(loan_amnt, 3)1:term36:gradeD -4.021553e-03
 ## poly(loan_amnt, 3)2:term36:gradeD  2.796767e-03
 ## poly(loan_amnt, 3)3:term36:gradeD -1.789983e-03
@@ -2745,7 +2404,7 @@ testing &lt;- testing(train_test_split)
 control &lt;- trainControl (
     method=&quot;cv&quot;,
     number=10,
-    verboseIter=T) #by setting this to true the model will report its progress after each estimation
+    verboseIter=F) #by setting this to true the model will report its progress after each estimation
 
 
 inf_model1&lt;-train(
@@ -2754,48 +2413,35 @@ inf_model1&lt;-train(
    method = &quot;lm&quot;,
     trControl = control
    )</code></pre>
-<pre><code>## + Fold01: intercept=TRUE</code></pre>
 <pre><code>## Warning in predict.lm(modelFit, newdata): prediction from a rank-deficient fit
+## may be misleading
+
+## Warning in predict.lm(modelFit, newdata): prediction from a rank-deficient fit
+## may be misleading
+
+## Warning in predict.lm(modelFit, newdata): prediction from a rank-deficient fit
+## may be misleading
+
+## Warning in predict.lm(modelFit, newdata): prediction from a rank-deficient fit
+## may be misleading
+
+## Warning in predict.lm(modelFit, newdata): prediction from a rank-deficient fit
+## may be misleading
+
+## Warning in predict.lm(modelFit, newdata): prediction from a rank-deficient fit
+## may be misleading
+
+## Warning in predict.lm(modelFit, newdata): prediction from a rank-deficient fit
+## may be misleading
+
+## Warning in predict.lm(modelFit, newdata): prediction from a rank-deficient fit
+## may be misleading
+
+## Warning in predict.lm(modelFit, newdata): prediction from a rank-deficient fit
+## may be misleading
+
+## Warning in predict.lm(modelFit, newdata): prediction from a rank-deficient fit
 ## may be misleading</code></pre>
-<pre><code>## - Fold01: intercept=TRUE 
-## + Fold02: intercept=TRUE</code></pre>
-<pre><code>## Warning in predict.lm(modelFit, newdata): prediction from a rank-deficient fit
-## may be misleading</code></pre>
-<pre><code>## - Fold02: intercept=TRUE 
-## + Fold03: intercept=TRUE</code></pre>
-<pre><code>## Warning in predict.lm(modelFit, newdata): prediction from a rank-deficient fit
-## may be misleading</code></pre>
-<pre><code>## - Fold03: intercept=TRUE 
-## + Fold04: intercept=TRUE</code></pre>
-<pre><code>## Warning in predict.lm(modelFit, newdata): prediction from a rank-deficient fit
-## may be misleading</code></pre>
-<pre><code>## - Fold04: intercept=TRUE 
-## + Fold05: intercept=TRUE</code></pre>
-<pre><code>## Warning in predict.lm(modelFit, newdata): prediction from a rank-deficient fit
-## may be misleading</code></pre>
-<pre><code>## - Fold05: intercept=TRUE 
-## + Fold06: intercept=TRUE</code></pre>
-<pre><code>## Warning in predict.lm(modelFit, newdata): prediction from a rank-deficient fit
-## may be misleading</code></pre>
-<pre><code>## - Fold06: intercept=TRUE 
-## + Fold07: intercept=TRUE</code></pre>
-<pre><code>## Warning in predict.lm(modelFit, newdata): prediction from a rank-deficient fit
-## may be misleading</code></pre>
-<pre><code>## - Fold07: intercept=TRUE 
-## + Fold08: intercept=TRUE</code></pre>
-<pre><code>## Warning in predict.lm(modelFit, newdata): prediction from a rank-deficient fit
-## may be misleading</code></pre>
-<pre><code>## - Fold08: intercept=TRUE 
-## + Fold09: intercept=TRUE</code></pre>
-<pre><code>## Warning in predict.lm(modelFit, newdata): prediction from a rank-deficient fit
-## may be misleading</code></pre>
-<pre><code>## - Fold09: intercept=TRUE 
-## + Fold10: intercept=TRUE</code></pre>
-<pre><code>## Warning in predict.lm(modelFit, newdata): prediction from a rank-deficient fit
-## may be misleading</code></pre>
-<pre><code>## - Fold10: intercept=TRUE 
-## Aggregating results
-## Fitting final model on full training set</code></pre>
 <pre class="r"><code>summary(inf_model1)</code></pre>
 <pre><code>## 
 ## Call:
@@ -3017,7 +2663,7 @@ testing &lt;- testing(train_test_split)
 control &lt;- trainControl (
     method=&quot;cv&quot;,
     number=10,
-    verboseIter=T) #by setting this to true the model will report its progress after each estimation
+    verboseIter=F) #by setting this to true the model will report its progress after each estimation
 
 
 lambda_seq &lt;- seq(0, 0.01, length = 1000)
@@ -3032,7 +2678,6 @@ lasso &lt;- train(
   trControl = control,
   tuneGrid = expand.grid(alpha = 1, lambda = lambda_seq) #alpha=1 specifies to run a LASSO regression. If alpha=0 the model would run ridge regression.
   )</code></pre>
-<pre><code>## + Fold01: alpha=1, lambda=0.01</code></pre>
 <pre><code>## Warning in preProcess.default(thresh = 0.95, k = 5, freqCut = 19, uniqueCut =
 ## 10, : These variables have zero variances: home_ownershipOTHER:addr_stateIL,
 ## home_ownershipOTHER:addr_stateKY, home_ownershipOTHER:addr_stateLA,
@@ -3055,8 +2700,6 @@ lasso &lt;- train(
 ## home_ownershipOTHER:addr_stateUT:annual_inc,
 ## home_ownershipOTHER:addr_stateWA:annual_inc,
 ## home_ownershipOTHER:addr_stateWI:annual_inc</code></pre>
-<pre><code>## - Fold01: alpha=1, lambda=0.01 
-## + Fold02: alpha=1, lambda=0.01</code></pre>
 <pre><code>## Warning in preProcess.default(thresh = 0.95, k = 5, freqCut
 ## = 19, uniqueCut = 10, : These variables have zero variances:
 ## home_ownershipOTHER:addr_stateKY, home_ownershipOTHER:addr_stateLA,
@@ -3078,8 +2721,6 @@ lasso &lt;- train(
 ## home_ownershipOTHER:addr_stateUT:annual_inc,
 ## home_ownershipOTHER:addr_stateWA:annual_inc,
 ## home_ownershipOTHER:addr_stateWI:annual_inc</code></pre>
-<pre><code>## - Fold02: alpha=1, lambda=0.01 
-## + Fold03: alpha=1, lambda=0.01</code></pre>
 <pre><code>## Warning in preProcess.default(thresh = 0.95, k = 5, freqCut = 19, uniqueCut =
 ## 10, : These variables have zero variances: home_ownershipOTHER:addr_stateCT,
 ## home_ownershipOTHER:addr_stateKY, home_ownershipOTHER:addr_stateLA,
@@ -3102,8 +2743,6 @@ lasso &lt;- train(
 ## home_ownershipOTHER:addr_stateUT:annual_inc,
 ## home_ownershipOTHER:addr_stateWA:annual_inc,
 ## home_ownershipOTHER:addr_stateWI:annual_inc</code></pre>
-<pre><code>## - Fold03: alpha=1, lambda=0.01 
-## + Fold04: alpha=1, lambda=0.01</code></pre>
 <pre><code>## Warning in preProcess.default(thresh = 0.95, k = 5, freqCut = 19, uniqueCut =
 ## 10, : These variables have zero variances: home_ownershipOTHER:addr_stateCO,
 ## home_ownershipOTHER:addr_stateKY, home_ownershipOTHER:addr_stateLA,
@@ -3129,8 +2768,6 @@ lasso &lt;- train(
 ## home_ownershipOTHER:addr_stateVA:annual_inc,
 ## home_ownershipOTHER:addr_stateWA:annual_inc,
 ## home_ownershipOTHER:addr_stateWI:annual_inc</code></pre>
-<pre><code>## - Fold04: alpha=1, lambda=0.01 
-## + Fold05: alpha=1, lambda=0.01</code></pre>
 <pre><code>## Warning in preProcess.default(thresh = 0.95, k = 5, freqCut = 19, uniqueCut =
 ## 10, : These variables have zero variances: home_ownershipOTHER:addr_stateKY,
 ## home_ownershipOTHER:addr_stateLA, home_ownershipOTHER:addr_stateMD,
@@ -3153,8 +2790,6 @@ lasso &lt;- train(
 ## home_ownershipOTHER:addr_stateUT:annual_inc,
 ## home_ownershipOTHER:addr_stateWA:annual_inc,
 ## home_ownershipOTHER:addr_stateWI:annual_inc</code></pre>
-<pre><code>## - Fold05: alpha=1, lambda=0.01 
-## + Fold06: alpha=1, lambda=0.01</code></pre>
 <pre><code>## Warning in preProcess.default(thresh = 0.95, k = 5, freqCut = 19, uniqueCut =
 ## 10, : These variables have zero variances: home_ownershipOTHER:addr_stateKY,
 ## home_ownershipOTHER:addr_stateLA, home_ownershipOTHER:addr_stateMA,
@@ -3180,8 +2815,6 @@ lasso &lt;- train(
 ## home_ownershipOTHER:addr_stateUT:annual_inc,
 ## home_ownershipOTHER:addr_stateWA:annual_inc,
 ## home_ownershipOTHER:addr_stateWI:annual_inc</code></pre>
-<pre><code>## - Fold06: alpha=1, lambda=0.01 
-## + Fold07: alpha=1, lambda=0.01</code></pre>
 <pre><code>## Warning in preProcess.default(thresh = 0.95, k = 5, freqCut = 19, uniqueCut =
 ## 10, : These variables have zero variances: home_ownershipOTHER:addr_stateKS,
 ## home_ownershipOTHER:addr_stateKY, home_ownershipOTHER:addr_stateLA,
@@ -3204,8 +2837,6 @@ lasso &lt;- train(
 ## home_ownershipOTHER:addr_stateUT:annual_inc,
 ## home_ownershipOTHER:addr_stateWA:annual_inc,
 ## home_ownershipOTHER:addr_stateWI:annual_inc</code></pre>
-<pre><code>## - Fold07: alpha=1, lambda=0.01 
-## + Fold08: alpha=1, lambda=0.01</code></pre>
 <pre><code>## Warning in preProcess.default(thresh = 0.95, k = 5, freqCut
 ## = 19, uniqueCut = 10, : These variables have zero variances:
 ## home_ownershipOTHER:addr_stateKY, home_ownershipOTHER:addr_stateLA,
@@ -3227,8 +2858,6 @@ lasso &lt;- train(
 ## home_ownershipOTHER:addr_stateUT:annual_inc,
 ## home_ownershipOTHER:addr_stateWA:annual_inc,
 ## home_ownershipOTHER:addr_stateWI:annual_inc</code></pre>
-<pre><code>## - Fold08: alpha=1, lambda=0.01 
-## + Fold09: alpha=1, lambda=0.01</code></pre>
 <pre><code>## Warning in preProcess.default(thresh = 0.95, k = 5, freqCut = 19, uniqueCut =
 ## 10, : These variables have zero variances: home_ownershipOTHER:addr_stateAZ,
 ## home_ownershipOTHER:addr_stateKY, home_ownershipOTHER:addr_stateLA,
@@ -3251,8 +2880,6 @@ lasso &lt;- train(
 ## home_ownershipOTHER:addr_stateUT:annual_inc,
 ## home_ownershipOTHER:addr_stateWA:annual_inc,
 ## home_ownershipOTHER:addr_stateWI:annual_inc</code></pre>
-<pre><code>## - Fold09: alpha=1, lambda=0.01 
-## + Fold10: alpha=1, lambda=0.01</code></pre>
 <pre><code>## Warning in preProcess.default(thresh = 0.95, k = 5, freqCut
 ## = 19, uniqueCut = 10, : These variables have zero variances:
 ## home_ownershipOTHER:addr_stateKY, home_ownershipOTHER:addr_stateLA,
@@ -3274,10 +2901,6 @@ lasso &lt;- train(
 ## home_ownershipOTHER:addr_stateUT:annual_inc,
 ## home_ownershipOTHER:addr_stateWA:annual_inc,
 ## home_ownershipOTHER:addr_stateWI:annual_inc</code></pre>
-<pre><code>## - Fold10: alpha=1, lambda=0.01 
-## Aggregating results
-## Selecting tuning parameters
-## Fitting alpha = 1, lambda = 0 on full training set</code></pre>
 <pre><code>## Warning in preProcess.default(thresh = 0.95, k = 5, freqCut
 ## = 19, uniqueCut = 10, : These variables have zero variances:
 ## home_ownershipOTHER:addr_stateKY, home_ownershipOTHER:addr_stateLA,
@@ -3330,7 +2953,7 @@ coef(lasso$finalModel, lasso$bestTune$lambda)</code></pre>
 ## addr_stateKS                                 4.294079e-05
 ## addr_stateKY                                 4.761425e-05
 ## addr_stateLA                                 1.479635e-05
-## addr_stateMA                                 2.528221e-06
+## addr_stateMA                                 2.528222e-06
 ## addr_stateMD                                -2.046980e-05
 ## addr_stateMI                                -4.616264e-05
 ## addr_stateMN                                -6.902399e-05
@@ -3458,7 +3081,7 @@ coef(lasso$finalModel, lasso$bestTune$lambda)</code></pre>
 ## home_ownershipRENT:addr_stateWI              .           
 ## home_ownershipOTHER:annual_inc               .           
 ## home_ownershipOWN:annual_inc                -2.152167e-05
-## home_ownershipRENT:annual_inc               -8.114397e-06
+## home_ownershipRENT:annual_inc               -8.114396e-06
 ## addr_stateAZ:annual_inc                     -1.023752e-05
 ## addr_stateCA:annual_inc                      .           
 ## addr_stateCO:annual_inc                      4.944447e-05
@@ -3472,7 +3095,7 @@ coef(lasso$finalModel, lasso$bestTune$lambda)</code></pre>
 ## addr_stateMA:annual_inc                     -7.235475e-06
 ## addr_stateMD:annual_inc                      4.998360e-05
 ## addr_stateMI:annual_inc                      1.030505e-04
-## addr_stateMN:annual_inc                     -1.006433e-07
+## addr_stateMN:annual_inc                     -1.006432e-07
 ## addr_stateMO:annual_inc                      3.764251e-05
 ## addr_stateNC:annual_inc                     -1.226296e-05
 ## addr_stateNJ:annual_inc                      3.616753e-05
@@ -3531,13 +3154,13 @@ coef(lasso$finalModel, lasso$bestTune$lambda)</code></pre>
 ## poly(loan_amnt, 3)1:term60:gradeG           -3.646725e-03
 ## poly(loan_amnt, 3)2:term60:gradeG            2.802203e-03
 ## poly(loan_amnt, 3)3:term60:gradeG           -1.166074e-03
-## home_ownershipOTHER:addr_stateAZ:annual_inc  2.449712e-07
+## home_ownershipOTHER:addr_stateAZ:annual_inc  2.449713e-07
 ## home_ownershipOWN:addr_stateAZ:annual_inc    1.167209e-05
 ## home_ownershipRENT:addr_stateAZ:annual_inc   .           
 ## home_ownershipOTHER:addr_stateCA:annual_inc  1.123740e-04
 ## home_ownershipOWN:addr_stateCA:annual_inc    4.016358e-05
-## home_ownershipRENT:addr_stateCA:annual_inc  -9.489653e-06
-## home_ownershipOTHER:addr_stateCO:annual_inc -4.322583e-06
+## home_ownershipRENT:addr_stateCA:annual_inc  -9.489654e-06
+## home_ownershipOTHER:addr_stateCO:annual_inc -4.322584e-06
 ## home_ownershipOWN:addr_stateCO:annual_inc    2.006481e-05
 ## home_ownershipRENT:addr_stateCO:annual_inc  -5.199360e-05
 ## home_ownershipOTHER:addr_stateCT:annual_inc  .           
@@ -3574,7 +3197,7 @@ coef(lasso$finalModel, lasso$bestTune$lambda)</code></pre>
 ## home_ownershipOWN:addr_stateMN:annual_inc    2.008120e-06
 ## home_ownershipRENT:addr_stateMN:annual_inc  -1.071684e-04
 ## home_ownershipOTHER:addr_stateMO:annual_inc  .           
-## home_ownershipOWN:addr_stateMO:annual_inc    8.029628e-08
+## home_ownershipOWN:addr_stateMO:annual_inc    8.029634e-08
 ## home_ownershipRENT:addr_stateMO:annual_inc   .           
 ## home_ownershipOTHER:addr_stateNC:annual_inc  .           
 ## home_ownershipOWN:addr_stateNC:annual_inc   -2.123761e-05
@@ -3582,7 +3205,7 @@ coef(lasso$finalModel, lasso$bestTune$lambda)</code></pre>
 ## home_ownershipOTHER:addr_stateNJ:annual_inc -2.476715e-05
 ## home_ownershipOWN:addr_stateNJ:annual_inc    .           
 ## home_ownershipRENT:addr_stateNJ:annual_inc  -1.236532e-04
-## home_ownershipOTHER:addr_stateNV:annual_inc  3.733663e-07
+## home_ownershipOTHER:addr_stateNV:annual_inc  3.733665e-07
 ## home_ownershipOWN:addr_stateNV:annual_inc    .           
 ## home_ownershipRENT:addr_stateNV:annual_inc   1.223902e-05
 ## home_ownershipOTHER:addr_stateNY:annual_inc -5.884191e-05
@@ -3599,7 +3222,7 @@ coef(lasso$finalModel, lasso$bestTune$lambda)</code></pre>
 ## home_ownershipRENT:addr_stateOR:annual_inc   1.878517e-06
 ## home_ownershipOTHER:addr_statePA:annual_inc  .           
 ## home_ownershipOWN:addr_statePA:annual_inc   -7.060510e-05
-## home_ownershipRENT:addr_statePA:annual_inc  -1.312298e-07
+## home_ownershipRENT:addr_statePA:annual_inc  -1.312299e-07
 ## home_ownershipOTHER:addr_stateSC:annual_inc  .           
 ## home_ownershipOWN:addr_stateSC:annual_inc    9.212776e-05
 ## home_ownershipRENT:addr_stateSC:annual_inc  -3.813217e-05
