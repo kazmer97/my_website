@@ -96,6 +96,7 @@ It should look somewhat like this:
 
 ![](./zsh_profile.png)
 
+Make sure to change all instances of `Anaconda3` within this file to `miniforge`.
 
 After this repeat the conda init steps from step 3.
 
