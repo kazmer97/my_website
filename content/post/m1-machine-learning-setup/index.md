@@ -1,7 +1,7 @@
 ---
 # Documentation: https://wowchemy.com/docs/managing-content/
 
-title: "Setting up Apple M1 for Seamles Machine Learning"
+title: "Setting up Apple M1 for Seamless Machine Learning"
 subtitle: ""
 summary: "Installation guide for native install of Python, Tensorflow and Keras on apple M1 machines."
 authors: 
@@ -75,7 +75,7 @@ Run this command to install Miniforge:
 
 Once the installation is complete you will need to close the terminal and reopen. Then you will need to use the following command:
 
-`conda init zsh` or `conda init bash` This depends on which kinf of terminal profile your machine uses you can check by looking at top of your terminal window. 
+`conda init zsh` or `conda init bash` This depends on which kind of terminal profile your machine uses you can check by looking at top of your terminal window. 
 
 ![](./zsh.png)
 
