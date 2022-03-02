@@ -44,7 +44,7 @@ url_video: ""
 slides: ""
 ---
 
-{{< icon name="download" pack="fas" >}} Download my {{< staticref "uploads/APPLE.csv" "newtab" >}}apple_data{{< /staticref >}}
+{{< icon name="download" pack="fas" >}} Download my {{< staticref "uploads/AAPL.csv" "newtab" >}}apple_data{{< /staticref >}}
 
 
 # Apple Closing Price LSTM RNN Models
