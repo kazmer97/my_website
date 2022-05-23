@@ -16,15 +16,15 @@ subtitle:
 # - Add/remove as many `feature` blocks below as you like.
 # - For available icons, see: https://wowchemy.com/docs/page-builder/#icons
 feature:
-- description: 75%
+- description: Stats and Visualisation
   icon: r-project
   icon_pack: fab
   name: R
-- description: 80 %
+- description: 
   icon: chart-line
   icon_pack: fas
   name: Statistics
-- description: 90%
+- description: ML, Visualisation, General
   icon: python
   icon_pack: fab
   name: Python
@@ -40,15 +40,21 @@ feature:
 # For example, reference `assets/media/icons/xyz.svg` as `icon: 'xyz'`
 - icon: cpp
   icon_pack: custom
-  description: 80%
+  description:
   name: C++
-- description: 70%
+- description:
   icon: matlab
   icon_pack: custom
   name: Matlab
-- description: 75%
+- description:
   icon: mysql
   icon_pack: custom
   name: MySQL
+  
+- icon: magnifying-glass-chart-solid
+  icon_pack: custom
+  name: Business Analytics
+  
+  
  
 ---
