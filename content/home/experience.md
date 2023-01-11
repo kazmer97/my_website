@@ -22,6 +22,22 @@ date_format: Jan 2006
 #   Leave `date_end` empty if it's your current employer.
 #   Begin multi-line descriptions with YAML's `|2-` multi-line prefix.
 experience:
+
+  - title: Customers Solutions Engineer
+    company: Flexciton
+    company_url: 'https://www.flexciton.com'
+    company_logo: 
+    location: London
+    date_start: '2022-11-14'
+    date_end: ''
+    description: |2- 
+        Responsibilities included:
+  
+        * Working with customers to understand their needs and requirements
+        * Designing and implementing solutions to meet customer needs
+        * Working with the development team to implement new features
+        * Working with the sales team to create proposals and presentations
+
   - title: Software Engineer
     company: Bosch GMBH
     company_url: ''
@@ -31,11 +47,11 @@ experience:
     date_end: '2021-07-31'
     description: |2-
         Responsibilities included:
-        
+  
         * Implementing new features in C++ for the Parking Video Visualisation
         * Code improvements and debugging
         * Development Process Improvement
-        
+  
   - title: Digitalisation Consultant
     company: PROMELEK S.A.
     location: Cluj-Napoca, Romania
@@ -43,10 +59,10 @@ experience:
     date_end: '2020-12-01'
     description: |2-
         Responsabilities included:
-        
+  
         * Developed a Micrososft Power Automate based tool for the company to track Product Returns
         * Helped in definining the new fully digital process and the information flow between teams.
-        
+  
   - title: Business Analyst Intern
     company: Humatica
     company_url: ''
@@ -56,7 +72,7 @@ experience:
     date_end: '2019-08-24'
     description: |2-
         Responsibilities included:
-        
+  
         * Modelled the size of the High Net-Worth wealth management market and segmented it into 20 dimensions for the client.
         * Wrote a 5 and 10 year outlook report on the effects of Automation and AI on operating models across industries, providing a roadmap for sectors where management consulting might be needed.
         * Presented the analyses techniques and data sources in the excel models, during 3 client meetings accompanying the partner and manager
@@ -70,7 +86,7 @@ experience:
     date_end: '2017-09-17'
     description: |2-
         Responsabilities included:
-        
+  
         * Researched topics that fall under the umbrella term Industry 4.0, such as: predictive maintenance, AR assisted production lines, machine learning, collaborative robots.
         * Wrote, recoded and edited one in-depth explanatory and one marketing video about the technologies enabling the next industrial revolution, both of are still in use at the company.
         * Shadowed the head of the innovation lab at the company, to learn about their digitalisation efforts.
